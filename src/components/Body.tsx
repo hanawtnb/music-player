@@ -3,6 +3,8 @@ import { memo, useEffect, useState, VFC } from "react";
 
 import Poster from "./Poster";
 import { Search } from "./Searchbar";
+import PrimaryButton from "./atoms/button/PrimaryButton";
+import GenreCard from "./atoms/card/GenreCard";
 
 type Props = {
   spotifyApi: any;
@@ -92,6 +94,22 @@ export const Body: VFC<Props> = (props) => {
                   chooseTrack={chooseTrack}
                 />
               ))}
+      </div>
+      <div className="flex gap-x-8 absolute min-w-full md:relative ml-6">
+        <div className="hidden xl:inline max-w-[270px]">
+          <h2 className="text-white font-bold mb-3">Genres</h2>
+          <div className="flex gap-x-2 gap-y-2.5 flex-wrap mb-3">
+            <GenreCard>Classic</GenreCard>
+            <GenreCard>House</GenreCard>
+            <GenreCard>Minimal</GenreCard>
+            <GenreCard>Hip-hop</GenreCard>
+            <GenreCard>Electronic</GenreCard>
+            <GenreCard>Chillout</GenreCard>
+            <GenreCard>Blues</GenreCard>
+            <GenreCard>Country</GenreCard>
+            <PrimaryButton>All Genres</PrimaryButton>
+          </div>
+        </div>
       </div>
     </section>
   );
