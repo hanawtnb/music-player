@@ -1,14 +1,16 @@
 import { useSession } from "next-auth/react";
 import { memo, useEffect, useState, VFC } from "react";
+
 import Poster from "./Poster";
 import { Search } from "./Searchbar";
 
 type Props = {
   spotifyApi: any;
+  chooseTrack: (arg0: any) => any;
 };
 
 export const Body: VFC<Props> = (props) => {
-  const { spotifyApi } = props;
+  const { spotifyApi, chooseTrack } = props;
   //クライアント再度でセッションを取得する時はuseSessionで、サーバー再度の時はgetSession
   const { data: session } = useSession();
   //sessionにはアクセストークンやユーザー情報が入っている。
@@ -21,7 +23,7 @@ export const Body: VFC<Props> = (props) => {
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
-  }, [accessToken]);
+  }, [accessToken, spotifyApi]);
 
   //検索
   useEffect(() => {
@@ -49,8 +51,6 @@ export const Body: VFC<Props> = (props) => {
     if (!accessToken) return;
 
     spotifyApi.getNewReleases().then((res: any) => {
-      // console.log(res);
-
       setNewRelease(
         res.body.albums.items.map((track: any) => {
           return {
@@ -65,7 +65,7 @@ export const Body: VFC<Props> = (props) => {
         })
       );
     });
-  }, [search, accessToken]);
+  }, [search, accessToken, spotifyApi]);
 
   console.log(newRelease);
 
@@ -74,20 +74,24 @@ export const Body: VFC<Props> = (props) => {
       <Search search={search} setSearch={setSearch} />
       <div className="grid overflow-y-scroll scrollbar-hide h-96 py-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 p-4">
         {searchResults.length === 0
-          ? newRelease.slice(0, 4).map((track: any) => (
-              <Poster
-                key={track.id}
-                track={track}
-                // chooseTrack={chooseTrack}
-              />
-            ))
-          : searchResults.slice(0, 4).map((track: any) => (
-              <Poster
-                key={track.id}
-                track={track}
-                // chooseTrack={chooseTrack}
-              />
-            ))}
+          ? newRelease
+              .slice(0, 4)
+              .map((track: any) => (
+                <Poster
+                  key={track.id}
+                  track={track}
+                  chooseTrack={chooseTrack}
+                />
+              ))
+          : searchResults
+              .slice(0, 4)
+              .map((track: any) => (
+                <Poster
+                  key={track.id}
+                  track={track}
+                  chooseTrack={chooseTrack}
+                />
+              ))}
       </div>
     </section>
   );
