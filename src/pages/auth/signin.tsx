@@ -52,6 +52,7 @@ function Signin({ providers }: any) {
 
 export default Signin;
 
+// サーバサイドでsession情報を取得したい場合はuseSession Hookは利用できないのでgetSessionを利用します。
 // getServerSidePropsはクライアントからのアクセス時にサーバ側でデータを取得しpre-Renderingする。
 export async function getServerSideProps() {
   const providers = await getProviders();

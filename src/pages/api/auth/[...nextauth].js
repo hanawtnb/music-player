@@ -64,7 +64,7 @@ export default NextAuth({
   },
   //NextAuth Refresh Token Rotationからコピー。
   callbacks: {
-    //JWT(JSON Web Token)
+    //JWT(JSON Web Token)の確認。
     async jwt({ token, user, account }) {
       // 最初のサインイン
       if (account && user) {
@@ -84,6 +84,9 @@ export default NextAuth({
       // アクセストークンが切れていたら更新する。
       return refreshAccessToken(token);
     },
+
+    // sessionオブジェクトに情報を追加したい場合にはcallbacksのsessionを利用することができる。
+    // sessionのユーザー情報とtokenのユーザー情報を紐づけている。
     async session({ session, token }) {
       session.user = token.user;
       session.accessToken = token.accessToken;
