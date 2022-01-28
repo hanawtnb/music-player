@@ -18,7 +18,7 @@ const Poster: VFC<Props> = (props) => {
   const onClickPlayMusic = () => {
     chooseTrack(track);
 
-    if (track.uri === playingTrack.uri) {
+    if (track?.uri === playingTrack?.uri) {
       setPlay(!play);
     }
   };
