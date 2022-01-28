@@ -10,5 +10,5 @@ export const playState = atom({
 // 再生中の曲
 export const playingTrackState = atom({
   key: "playingTrackState",
-  default: "",
+  default: null as any,
 });
