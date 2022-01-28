@@ -1,4 +1,4 @@
-import Dropdown from "./atoms/molecules/Dropdown";
+import { Dropdown } from "./atoms/molecules/Dropdown";
 
 export const Right = () => {
   return (
