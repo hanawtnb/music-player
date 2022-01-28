@@ -9,7 +9,10 @@ export const Dropdown = () => {
   const { data: session }: any = useSession();
 
   return (
-    <Menu as="div" className="w-24 h-12 relative flex items-center">
+    <Menu
+      as="div"
+      className="w-24 h-12 relative flex items-center ml-[80px] mt-[5px]"
+    >
       <div className="w-full absolute right-1 group">
         <Menu.Button className="flex h-11 items-center w-full px-4 py-3 text-sm font-medium text-white bg-[#1A1A1A] rounded-full hover:bg-[#3E3E3E]">
           {session?.user?.image === undefined ? (

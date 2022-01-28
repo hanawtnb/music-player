@@ -15,6 +15,7 @@ const Poster: VFC<Props> = (props) => {
   const [playingTrack, setPlayingTrack] = useRecoilState(
     playingTrackState
   ) as any;
+
   const onClickPlayMusic = () => {
     chooseTrack(track);
 
