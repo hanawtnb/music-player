@@ -8,5 +8,14 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  variants: {
+    extend: {},
+    //スクロールバーを丸くする。
+    scrollbar: ["rounded"],
+  },
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("tailwind-scrollbar"),
+    require("tailwind-scrollbar-hide"),
+  ],
 };
