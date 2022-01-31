@@ -2,7 +2,7 @@ import { getProviders, signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { Loader } from "../../components/Loader";
 
@@ -15,7 +15,7 @@ function Signin({ providers }: any) {
     if (session) {
       router.push("/");
     }
-  }, [router, session]);
+  }, [session]);
 
   if (session) {
     <Loader />;
