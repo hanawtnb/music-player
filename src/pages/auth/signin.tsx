@@ -15,7 +15,7 @@ function Signin({ providers }: any) {
     if (session) {
       router.push("/");
     }
-  }, [session]);
+  }, [router, session]);
 
   if (session) {
     <Loader />;
