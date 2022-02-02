@@ -42,10 +42,10 @@ const Poster: VFC<Props> = (props) => {
           )}
         </div>
         <div className="text-[15px]">
-          <h4 className="font-extrabold truncate w-44 line-clamp-{1}">
+          <h4 className="font-extrabold truncate w-44 line-clamp-1">
             {track.title}
           </h4>
-          <h6 className="line-clamp-{1}">{track?.artist}</h6>
+          <h6 className="line-clamp-1">{track?.artist}</h6>
         </div>
       </div>
     </div>
