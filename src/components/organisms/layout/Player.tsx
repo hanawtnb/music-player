@@ -2,7 +2,7 @@ import SpotifyPlayer from "react-spotify-web-playback";
 import { useEffect, VFC } from "react";
 import { useRecoilState } from "recoil";
 
-import { playingTrackState, playState } from "../atoms/playerAtom";
+import { playingTrackState, playState } from "../../../atoms/playerAtom";
 
 type Props = {
   accessToken: any;

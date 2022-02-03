@@ -1,18 +1,21 @@
-import { memo, useState, VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { ImHeadphones } from "react-icons/im";
 import { AiFillHeart } from "react-icons/ai";
 import { useRecoilState } from "recoil";
 
-import { playingTrackState, playState } from "../atoms/playerAtom";
+import { playingTrackState, playState } from "../../atoms/playerAtom";
 import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
+import { useSession } from "next-auth/react";
 
 type Props = {
   track: any;
   chooseTrack: (arg1: any) => void;
+  spotifyApi: any;
 };
 
-const Track: VFC<Props> = (props) => {
-  const { track, chooseTrack } = props;
+const Track: VFC<Props> = (props: Props) => {
+  const { track, chooseTrack, spotifyApi } = props;
+  // お気に入り登録
   const [hasLiked, setHasLiked] = useState(false);
   const [play, setPlay] = useRecoilState(playState);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
@@ -24,6 +27,15 @@ const Track: VFC<Props> = (props) => {
       setPlay(!play);
     }
   };
+
+  // const onClickAddToPlaylist = (track: any) => {
+  //   setHasLiked(!hasLiked);
+  //   spotifyApi.addToMySavedTracks([track.id]).then(function (data) {});
+  // };
+
+  // const onClickArtistPage = (e) => {
+  //   router.push("./Artist.tsx");
+  // };
 
   return (
     <div className=" flex items-center justify-between space-x-20 cursor-default hover:bg-white/10 py-2 px-4 rounded-lg group transition ease-out">
@@ -40,9 +52,11 @@ const Track: VFC<Props> = (props) => {
           <h4 className="text-white text-sm font-semibold truncate w-[450px]">
             {track.title}
           </h4>
+          {/* <Link href={{ pathname: "/artist", query: { name: track.artist } }}> */}
           <p className="text-white/70 text-[13px] font-semibold group-hover:text-white">
             {track.artist}
           </p>
+          {/* </Link> */}
         </span>
       </div>
 

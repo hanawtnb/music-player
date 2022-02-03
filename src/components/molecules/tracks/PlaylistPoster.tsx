@@ -2,7 +2,7 @@
 import { memo, useCallback, VFC } from "react";
 import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { useRecoilState } from "recoil";
-import { playingTrackState, playState } from "../atoms/playerAtom";
+import { playingTrackState, playState } from "../../../atoms/playerAtom";
 
 type Props = {
   playlist: any;

@@ -12,9 +12,3 @@ export const playingTrackState = atom({
   key: "playingTrackState",
   default: null as any,
 });
-
-//プレイリスト遷移ボタン押下のステータス
-export const playlistSelectedState = atom({
-  key: "playlistSelectedState",
-  default: false,
-});

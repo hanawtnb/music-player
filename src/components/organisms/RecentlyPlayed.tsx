@@ -1,6 +1,6 @@
 import { VFC } from "react";
 import { useRecoilState } from "recoil";
-import { playingTrackState, playState } from "../atoms/playerAtom";
+import { playingTrackState, playState } from "../../atoms/playerAtom";
 
 type Props = {
   chooseTrack: (arg0: any) => any;

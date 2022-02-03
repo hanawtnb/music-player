@@ -3,8 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-
-import { Loader } from "../../components/Loader";
+import { Loader } from "../../components/atoms/Loader";
 
 function Signin({ providers }: any) {
   // useSessionで session 情報を保持する変数を作成

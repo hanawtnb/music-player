@@ -1,20 +1,27 @@
 import { ViewGridIcon } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
 import { useEffect, useState, VFC } from "react";
-import PrimaryButton from "./atoms/button/PrimaryButton";
-import { Dropdown } from "./atoms/molecules/Dropdown";
-import { RecentlyPlayed } from "./RecentlyPlayed";
+import PrimaryButton from "../../atoms/button/PrimaryButton";
+import { Dropdown } from "../../molecules/Dropdown";
+import { RecentlyPlayed } from "../RecentlyPlayed";
 
 type Props = {
   spotifyApi: any;
   chooseTrack: (arg0: any) => any;
+  accessToken: any;
 };
 
 export const Right: VFC<Props> = (props: Props) => {
-  const { spotifyApi, chooseTrack } = props;
+  const { spotifyApi, chooseTrack, accessToken } = props;
   const { data: session } = useSession();
-  const accessToken = session?.accessToken;
+  // const accessToken = session?.accessToken;
   const [recentlyPlayed, setRecentlyPlayed] = useState([]);
+
+  // アクセストークンを設定
+  useEffect(() => {
+    if (!accessToken) return;
+    spotifyApi.setAccessToken(accessToken);
+  }, [accessToken, spotifyApi]);
 
   //最近再生された曲
   useEffect(() => {

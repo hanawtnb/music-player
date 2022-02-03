@@ -1,11 +1,9 @@
 import { useSession } from "next-auth/react";
 import { memo, useEffect, useState, VFC } from "react";
 
-import Poster from "./Poster";
-import { Search } from "./Searchbar";
-import PrimaryButton from "./atoms/button/PrimaryButton";
-import GenreCard from "./atoms/card/GenreCard";
-import Track from "./Track";
+import Poster from "../molecules/tracks/Poster";
+import { Search } from "../molecules/Searchbar";
+import Track from "../molecules/Track";
 
 type Props = {
   spotifyApi: any;
@@ -17,12 +15,16 @@ export const Body: VFC<Props> = (props) => {
   //クライアント再度でセッションを取得する時はuseSessionで、サーバー再度の時はgetSession
   const { data: session } = useSession();
   //sessionにはアクセストークンやユーザー情報が入っている。
-  const accessToken = session?.accessToken;
   // const {accessToken} = session!でもOK。
+  const accessToken = session?.accessToken;
+  // 検索
   const [search, setSearch] = useState("");
+  // 検索結果をAPIから取得
   const [searchResults, setSearchResults] = useState([]);
+  // 新着音楽をAPIから取得
   const [newReleases, setNewReleases] = useState([]);
 
+  // アクセストークンを設定
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
@@ -95,20 +97,6 @@ export const Body: VFC<Props> = (props) => {
               ))}
       </div>
       <div className="flex gap-x-8 absolute min-w-full md:relative ml-6">
-        {/* <div className="hidden xl:inline max-w-[270px]">
-          <h2 className="text-white font-bold mb-3">Genres</h2>
-          <div className="flex gap-x-2 gap-y-2.5 flex-wrap mb-3">
-            <GenreCard>Classic</GenreCard>
-            <GenreCard>House</GenreCard>
-            <GenreCard>Minimal</GenreCard>
-            <GenreCard>Hip-hop</GenreCard>
-            <GenreCard>Electronic</GenreCard>
-            <GenreCard>Chillout</GenreCard>
-            <GenreCard>Blues</GenreCard>
-            <GenreCard>Country</GenreCard>
-          </div>
-          <PrimaryButton>All Genres</PrimaryButton>
-        </div> */}
         {/* 曲 */}
         <div>
           <h2 className="text-white font-bold mb-3 mt-0">
@@ -123,6 +111,7 @@ export const Body: VFC<Props> = (props) => {
                       key={track.id}
                       track={track}
                       chooseTrack={chooseTrack}
+                      spotifyApi={spotifyApi}
                     />
                   ))
               : searchResults
@@ -132,6 +121,7 @@ export const Body: VFC<Props> = (props) => {
                       key={track.id}
                       track={track}
                       chooseTrack={chooseTrack}
+                      spotifyApi={spotifyApi}
                     />
                   ))}
           </div>
