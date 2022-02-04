@@ -112,6 +112,7 @@ export const Body: VFC<Props> = (props) => {
                       track={track}
                       chooseTrack={chooseTrack}
                       spotifyApi={spotifyApi}
+                      accessToken={accessToken}
                     />
                   ))
               : searchResults
@@ -122,6 +123,7 @@ export const Body: VFC<Props> = (props) => {
                       track={track}
                       chooseTrack={chooseTrack}
                       spotifyApi={spotifyApi}
+                      accessToken={accessToken}
                     />
                   ))}
           </div>
