@@ -9,10 +9,7 @@ import SpotifyWebApi from "spotify-web-api-node";
 import { useEffect, useState } from "react";
 
 import { playingTrackState } from "../atoms/playerAtom";
-import { Sidebar } from "../components/organisms/layout/Sidebar";
 import { Body } from "../components/template/Body";
-import { Right } from "../components/organisms/layout/Right";
-import { Player } from "../components/organisms/layout/Player";
 import { SidebarLayout } from "../components/template/SidebarLayout";
 import { Loader } from "../components/atoms/Loader";
 
@@ -61,15 +58,7 @@ export default function Home() {
       </Head>
 
       <SidebarLayout>
-        {/* <main className="flex min-h-screen min-w-max bg-black lg:pb-24"> */}
-        {/* <Sidebar /> */}
-
         <Body spotifyApi={spotifyApi} chooseTrack={chooseTrack} />
-
-        {/* <Right spotifyApi={spotifyApi} chooseTrack={chooseTrack} />
-        <div className="fixed bottom-0 left-0 right-0 z-50 ">
-          <Player accessToken={accessToken} trackUri={playingTrack?.uri} />
-        </div> */}
       </SidebarLayout>
     </div>
   );
