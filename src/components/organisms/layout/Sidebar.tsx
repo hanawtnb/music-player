@@ -11,7 +11,7 @@ import Link from "next/Link";
 
 export const Sidebar = () => {
   return (
-    <section className="fixed top-0 left-0 z-40 flex flex-col p-4 items-center bg-black w-[225px] h-screen space-y-8">
+    <section className="fixed top-0 left-0 z-40 flex flex-col p-4 items-center bg-black w-[200px] h-screen space-y-8">
       <Image src="/logo.png" width={56} height={56} objectFit="contain" />
       <div className="flex flex-col space-y-8 ">
         <Link href="/">

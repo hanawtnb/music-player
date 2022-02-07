@@ -54,7 +54,7 @@ export const Right: VFC<Props> = (props: Props) => {
 
   return (
     <>
-      <section className="p-4 space-y-8 pr-8">
+      <section className="space-y-8 pr-8">
         <div className="flex space-x-2 items-center justify-between">
           <Dropdown />
         </div>
