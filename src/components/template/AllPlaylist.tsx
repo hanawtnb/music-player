@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import { useEffect, useState, VFC } from "react";
 import PlaylistPoster from "../molecules/tracks/PlaylistPoster";
-import Track from "../molecules/Track";
+import Link from "next/link";
 
 type Props = {
   chooseTrack: (arg1: any) => void;
@@ -37,7 +37,7 @@ export const AllPlaylist: VFC<Props> = (props: Props) => {
               name: playlist.name,
               uri: playlist.uri,
               description: playlist.description,
-              image: playlist.images[0].url,
+              image: playlist.images[0]?.url,
             };
           })
         );
@@ -45,16 +45,26 @@ export const AllPlaylist: VFC<Props> = (props: Props) => {
   }, [accessToken, session?.user?.id, session?.user?.name, spotifyApi]);
 
   return (
-    <section className="my-[20px] bg-black ml-60  space-y-7 md:max-w-6xl flex-grow md:mr-2.5">
+    <section className="my-[20px] bg-black ml-52  space-y-7 md:max-w-6xl flex-grow md:mr-2.5">
       <div className="grid overflow-y-scroll scrollbar-hide h-screen py-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 p-4">
         {playlists.length === 0
           ? "No playlists are available"
           : playlists.map((playlist: any) => (
-              <PlaylistPoster
+              <Link
                 key={playlist.id}
-                playlist={playlist}
-                chooseTrack={chooseTrack}
-              />
+                href="/album/[playlist.id]"
+                as={`/album/${playlist.id}`}
+                // as={`/album/${playlist.id}`}
+                passHref
+              >
+                <a>
+                  <PlaylistPoster
+                    key={playlist.id}
+                    playlist={playlist}
+                    chooseTrack={chooseTrack}
+                  />
+                </a>
+              </Link>
             ))}
       </div>
     </section>
