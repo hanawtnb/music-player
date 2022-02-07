@@ -3,6 +3,7 @@ import { memo, useCallback, VFC } from "react";
 import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { useRecoilState } from "recoil";
 import { playingTrackState, playState } from "../../../atoms/playerAtom";
+import { PlayIcon } from "../../atoms/icon/PlayIcon";
 
 type Props = {
   track: any;
@@ -34,14 +35,11 @@ const Poster: VFC<Props> = (props) => {
         className="h-full  w-full absolute inset-0 object-cover rounded-[50px] opacity-80 group-hover:opacity-100"
       />
       <div className="absolute bottom-10 inset-x-0 ml-4 flex items-center space-x-3.5">
-        <div className="h-10 w-10 bg-[#15883e] rounded-full flex items-center justify-center group-hover:bg-[#1db954] flex-shrink-0">
-          {track?.uri === playingTrack?.uri && play ? (
-            <BsFillPauseFill className="text-xl " />
-          ) : (
-            <BsFillPlayFill className="text-xl ml-[1px]" />
-          )}
+        <div className="relative left-40">
+          <PlayIcon track={track} />
         </div>
-        <div className="text-[15px]">
+
+        <div className="text-[15px] left-30">
           <h4 className="font-extrabold truncate w-44 line-clamp-1">
             {track.title}
           </h4>
