@@ -26,7 +26,10 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
         />
         {track.uri === playingTrack?.uri && play ? (
           <div className="h-10 w-10 rounded-full border border-[#15883e] flex items-center justify-center absolute -right-0.5 bg-[#15883e] icon hover:scale-110">
-            <BsFillPauseFill className="text-white text-xl" />
+            <BsFillPauseFill
+              onClick={onClickPlayMusic}
+              className="text-white text-xl"
+            />
           </div>
         ) : (
           <div
