@@ -60,6 +60,7 @@ const Artist = () => {
             artist: track.artists.map((artist: any) => {
               return {
                 artistName: artist.name,
+                artistId: artist.id,
               };
             }),
             albumUrl: track.album.images[0].url,
