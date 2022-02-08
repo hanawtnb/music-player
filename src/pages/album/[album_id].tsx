@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { IoMdHeart } from "react-icons/io";
 import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
+
 import { playingTrackState } from "../../atoms/playerAtom";
 import { PlaylistTrack } from "../../components/molecules/PlaylistTrack";
 import { SidebarLayout } from "../../components/template/SidebarLayout";
@@ -13,14 +14,16 @@ const spotifyApi = new SpotifyWebApi({
 });
 
 const Album = () => {
-  const [hasLiked, setHasLiked] = useState(false);
   const [playlistTracks, setPlaylistTracks] = useState<any>([]);
   const [playlist, setPlaylist] = useState<any>([]);
   const router = useRouter();
   const { album_id } = router.query;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
 
-  //曲を再生
+  /**
+   * 曲を再生.
+   * @param track - 再生する曲
+   */
   const chooseTrack = (track: any): any => {
     setPlayingTrack(track);
   };
@@ -30,13 +33,15 @@ const Album = () => {
   // const {accessToken} = session!でもOK。
   const accessToken = session?.accessToken;
 
-  // アクセストークンを設定
   useEffect(() => {
+    // アクセストークンを設定
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
 
+    /**
+     *プレイリストを取得.
+     */
     spotifyApi.getPlaylist([album_id] as any).then((res: any) => {
-      console.log("ぷれいりすと", res.body);
       setPlaylist({
         id: res.body.id,
         name: res.body.name,
@@ -47,12 +52,12 @@ const Album = () => {
       });
     });
 
+    /**
+     * プレイリストの曲を取得.
+     */
     spotifyApi.getPlaylistTracks([album_id] as any).then((res: any) => {
-      console.log("アルバムの中", res.body.items[0]);
       setPlaylistTracks(
         res.body.items.map((track: any) => {
-          console.log("トラック２", track.track);
-
           return {
             id: track.track.id,
             name: track.track.name,
@@ -71,9 +76,6 @@ const Album = () => {
       );
     });
   }, [accessToken, album_id]);
-
-  console.log("ぷれいりすとのなかみ", playlist);
-  console.log("プレイリスト", playlistTracks);
 
   return (
     <SidebarLayout>
