@@ -1,9 +1,10 @@
 import { useEffect, useState, VFC } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { useRecoilState } from "recoil";
+import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
+import Link from "next/link";
 
 import { playingTrackState, playState } from "../../atoms/playerAtom";
-import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 
 type Props = {
   track: any;
@@ -35,6 +36,11 @@ const Track: VFC<Props> = (props: Props) => {
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken, spotifyApi]);
 
+  /**
+   * お気に入りに追加.
+   * @param index - 追加したい曲のIndex番号
+   * @param title - 追加したい曲のステータスタイトル
+   */
   const addPlayFavorite = (index: string, title: any): void => {
     // if (!accessToken) return;
     setHasLiked(true);
@@ -47,6 +53,11 @@ const Track: VFC<Props> = (props: Props) => {
     });
   };
 
+  /**
+   * お気に入りから削除.
+   * @param index - 削除したい曲のIndex番号
+   * @param title - 削除したい曲のタイトル
+   */
   const removePlayFavorite = (index: string, title: any) => {
     setHasLiked(false);
     spotifyApi.getAlbumTracks([index]).then((res: any) => {
@@ -73,11 +84,18 @@ const Track: VFC<Props> = (props: Props) => {
           <h4 className="text-white text-sm font-semibold truncate w-[450px]">
             {track.title}
           </h4>
-          {/* <Link href={{ pathname: "/artist", query: { name: track.artist } }}> */}
-          <p className="text-white/70 text-[13px] font-semibold group-hover:text-white">
-            {track.artist}
-          </p>
-          {/* </Link> */}
+          <Link
+            key={track.artistId}
+            href="/artist/[track.artistId]"
+            as={`/artist/${track.artistId}`}
+            passHref
+          >
+            <a>
+              <p className="hover:underline underline-offset-1 text-white/70 text-[13px] font-semibold group-hover:text-white">
+                {track.artist}
+              </p>
+            </a>
+          </Link>
         </span>
       </div>
 
