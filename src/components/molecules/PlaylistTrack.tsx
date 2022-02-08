@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { useState, VFC } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
@@ -16,7 +17,7 @@ type Props = {
 
 export const PlaylistTrack: VFC<Props> = (props: Props) => {
   const { track, chooseTrack, spotifyApi, accessToken, index } = props;
-  const [hasLiked, setHasLiked] = useState(false);
+
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
 
@@ -44,11 +45,21 @@ export const PlaylistTrack: VFC<Props> = (props: Props) => {
             <h4 className="text-white text-sm font-semibold truncate w-[450px]">
               {track.name}
             </h4>
-            {/* <Link href={{ pathname: "/artist", query: { name: track.artist } }}> */}
-            <p className="text-white/70 text-[13px] font-semibold group-hover:text-white">
-              {track.artist?.map((artist: any) => artist.artistName)}
-            </p>
-            {/* </Link> */}
+            {track.artist.map((artist: any) => (
+              <Link
+                key={artist.artistId}
+                href="/artist/[artist.artistId]"
+                as={`/artist/${artist.artistId}`}
+                passHref
+              >
+                <a>
+                  <span className="hover:underline underline-offset-1 text-white/70 text-[13px] font-semibold group-hover:text-white">
+                    {artist.artistName}
+                    &nbsp;
+                  </span>
+                </a>
+              </Link>
+            ))}
           </span>
         </div>
 

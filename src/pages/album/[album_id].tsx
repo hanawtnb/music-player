@@ -69,6 +69,7 @@ const Album = () => {
             artist: track.track.artists?.map((artist: any) => {
               return {
                 artistName: artist.name,
+                artistId: artist.id,
               };
             }),
           };

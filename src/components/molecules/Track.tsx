@@ -15,6 +15,7 @@ type Props = {
 
 const Track: VFC<Props> = (props: Props) => {
   const { track, chooseTrack, spotifyApi, accessToken } = props;
+
   // お気に入り登録
   const [hasLiked, setHasLiked] = useState(false);
   const [play, setPlay] = useRecoilState(playState);
@@ -70,7 +71,7 @@ const Track: VFC<Props> = (props: Props) => {
   };
 
   return (
-    <div className=" flex items-center justify-between space-x-20 cursor-default hover:bg-white/10 py-2 px-4 rounded-lg group transition ease-out">
+    <div className="flex items-center justify-between space-x-20 cursor-default hover:bg-white/10 py-2 px-4 rounded-lg group transition ease-out">
       <div
         className="items-center cursor-pointer w-full"
         onClick={onClickPlayMusic}
@@ -84,18 +85,22 @@ const Track: VFC<Props> = (props: Props) => {
           <h4 className="text-white text-sm font-semibold truncate w-[450px]">
             {track.title}
           </h4>
-          <Link
-            key={track.artistId}
-            href="/artist/[track.artistId]"
-            as={`/artist/${track.artistId}`}
-            passHref
-          >
-            <a>
-              <p className="hover:underline underline-offset-1 text-white/70 text-[13px] font-semibold group-hover:text-white">
-                {track.artist}
-              </p>
-            </a>
-          </Link>
+
+          {track.artist.map((artist: any) => (
+            <Link
+              key={artist.artistId}
+              href="/artist/[artist.artistId]"
+              as={`/artist/${artist.artistId}`}
+              passHref
+            >
+              <a>
+                <span className="hover:underline underline-offset-1 text-white/70 text-[13px] font-semibold group-hover:text-white">
+                  {artist.artistName}
+                  &nbsp;
+                </span>
+              </a>
+            </Link>
+          ))}
         </span>
       </div>
 

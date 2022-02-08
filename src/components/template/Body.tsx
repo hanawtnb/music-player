@@ -30,16 +30,24 @@ export const Body: VFC<Props> = (props) => {
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken, spotifyApi]);
 
-  //検索
+  /**
+   * 曲を検索.
+   */
   useEffect(() => {
     if (!search) return setSearchResults([]);
     if (!accessToken) return;
+
     spotifyApi.searchTracks(search).then((res: any) => {
       setSearchResults(
         res.body.tracks.items.map((track: any) => {
           return {
             id: track.id,
-            artist: track.artists[0].name,
+            artist: track.artists.map((artist: any) => {
+              return {
+                artistName: artist.name,
+                artistId: artist.id,
+              };
+            }),
             title: track.name,
             //音楽を再生するために使う。
             uri: track.uri,
@@ -51,7 +59,9 @@ export const Body: VFC<Props> = (props) => {
     });
   }, [search, accessToken, spotifyApi]);
 
-  //新着
+  /**
+   * 新着の曲を取得.
+   */
   useEffect(() => {
     if (!accessToken) return;
 
@@ -60,7 +70,12 @@ export const Body: VFC<Props> = (props) => {
         res.body.albums.items.map((track: any) => {
           return {
             id: track.id,
-            artist: track.artists[0].name,
+            artist: track.artists.map((artist: any) => {
+              return {
+                artistName: artist.name,
+                artistId: artist.id,
+              };
+            }),
             title: track.name,
             //音楽を再生するために使う。
             uri: track.uri,
