@@ -86,7 +86,7 @@ const Album = () => {
           <div className="flex bg-[#0D0D0D] relative top-8 left-9  w-[230px] h-[230px] overflow-hidden cursor-pointer ">
             <img
               src={playlist.albumUrl}
-              className="h-full w-full object-cover"
+              className="h-full w-full object-cover shadow"
             />
           </div>
           <div className="my-auto text-[15px] text-white  ml-20 w-auto">

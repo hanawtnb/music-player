@@ -54,12 +54,12 @@ export const Right: VFC<Props> = (props: Props) => {
 
   return (
     <>
-      <section className="space-y-8 pr-8">
+      <section className="space-y-8 pr-8 pt-4">
         <div className="flex space-x-2 items-center justify-between">
           <Dropdown />
         </div>
         {/* 最近再生された曲 */}
-        <div className="bg-[#0d0d0d] border-2 border-[#262626] p-4 rounded-xl space-y-4 h-[750px]">
+        <div className="bg-[#0d0d0d] border-2 border-[#262626] p-4 rounded-xl space-y-4 h-[735px]">
           <div className="flex items-center justify-between ">
             <h4 className="text-white font-semibold text-sm ">
               Recently Played
@@ -76,7 +76,6 @@ export const Right: VFC<Props> = (props: Props) => {
             ))}
           </div>
         </div>
-        <PrimaryButton>View All</PrimaryButton>
       </section>
       ;
     </>

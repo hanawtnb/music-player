@@ -75,11 +75,11 @@ const Artist = () => {
     <>
       <SidebarLayout>
         <section className="my-[20px] bg-black ml-64 space-y-8 md:max-w-6xl flex-grow md:mr-2.5">
-          <div className="flex  bg-white/20 h-60 rounded-2xl md:max-w-6xl flex-grow md:mr-2.5">
-            <div className="flex ">
+          <div className="flex  bg-white/20 h-72 rounded-2xl md:max-w-6xl flex-grow md:mr-2.5">
+            <div className="flex bg-[#0D0D0D] relative top-8 left-9  w-[230px] h-[230px] overflow-hidden cursor-pointer ">
               <img
                 src={artistInfo.image}
-                className="h-[200px] w-[200px] object-cover my-auto flex ml-8"
+                className="h-full w-full object-cover shadow"
               />
             </div>
             <div className="my-auto text-[15px] text-white  ml-20 w-auto">
@@ -91,12 +91,13 @@ const Artist = () => {
               </h1>
               <div className="flex items-center ">
                 <IoMdHeart />
-                <span className="text-white my-3">{artistInfo.followers}</span>
+                <span className="text-white my-3">
+                  {artistInfo.followers}&nbsp;followers
+                </span>
               </div>
             </div>
           </div>
-          <h2 className="text-white font-bold mb-0 mt-0">Top songs</h2>
-          <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[490px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
+          <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
             {topTracks.map((track: any, index: number) => (
               <PlaylistTrack
                 key={track.id}
