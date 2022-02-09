@@ -7,39 +7,74 @@ import { playingTrackState, playState } from "../../atoms/playerAtom";
 type Props = {
   track: any;
   onClickPlayMusic: () => void;
+  spotifyApi: any;
+  accessToken: any;
 };
 
 export const LikePlayButton: VFC<Props> = (props: Props) => {
-  const { track, onClickPlayMusic } = props;
+  const { track, onClickPlayMusic, spotifyApi, accessToken } = props;
   const [hasLiked, setHasLiked] = useState(false);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
 
+  /**
+   * お気に入りに追加.
+   * @param index - 追加したい曲のIndex番号
+   * @param title - 追加したい曲のステータスタイトル
+   */
+  const addPlayFavorite = (id: string, title: any): void => {
+    if (!accessToken) return;
+    setHasLiked(true);
+
+    spotifyApi.getAlbumTracks([id]).then((res: any) => {
+      res.body.items.map((track: any) => {
+        if (track.name === title) {
+          return spotifyApi.addToMySavedTracks([track.id]);
+        }
+      });
+    });
+  };
+
+  /**
+   * お気に入りから削除.
+   * @param index - 削除したい曲のIndex番号
+   * @param title - 削除したい曲のタイトル
+   */
+  const removePlayFavorite = (id: string, title: any) => {
+    setHasLiked(false);
+    spotifyApi.getAlbumTracks([id]).then((res: any) => {
+      res.body.items.map((track: any) => {
+        if (track.name === title) {
+          return spotifyApi.removeFromMySavedTracks([track.id]);
+        }
+      });
+    });
+  };
+
   return (
-    <div className="md:ml-auto flex items-center space-x-2.5">
-      <div className="flex items-center rounded-full border-2 border-[#262626] w-[85px] h-10 relative cursor-pointer group-hover:border-white/40">
-        <AiFillHeart
-          className={`text-xl ml-3 icon ${
-            hasLiked ? "text-[#1ed760]" : "text-[#868686]"
-          }`}
-          // onClick={() => addPlayFavorite(track.id, track.title)}
-        />
-        {track.uri === playingTrack?.uri && play ? (
-          <div className="h-10 w-10 rounded-full border border-[#15883e] flex items-center justify-center absolute -right-0.5 bg-[#15883e] icon hover:scale-110">
-            <BsFillPauseFill
-              onClick={onClickPlayMusic}
-              className="text-white text-xl"
-            />
-          </div>
-        ) : (
-          <div
-            onClick={onClickPlayMusic}
-            className="h-10 w-10 rounded-full border border-white/60 flex items-center justify-center absolute -right-0.5 hover:bg-[#15883e] hover:border-[#15883e] icon hover:scale-110"
-          >
-            <BsFillPlayFill className="text-white text-xl ml-[1px]" />
-          </div>
-        )}
-      </div>
-    </div>
+    <>
+      <AiFillHeart
+        className={`text-xl ml-3 icon ${
+          hasLiked ? "text-[#1ed760]" : "text-[#868686]"
+        }`}
+        onClick={
+          hasLiked
+            ? () => removePlayFavorite(track.albumId, track.title) as any
+            : () => addPlayFavorite(track.albumId, track.title) as any
+        }
+      />
+      {track.uri === playingTrack?.uri && play ? (
+        <div className="h-10 w-10 rounded-full border border-[#15883e] flex items-center justify-center absolute -right-0.5 bg-[#15883e] icon hover:scale-110">
+          <BsFillPauseFill className="text-white text-xl" />
+        </div>
+      ) : (
+        <div
+          onClick={onClickPlayMusic}
+          className="h-10 w-10 rounded-full border border-white/60 flex items-center justify-center absolute -right-0.5 hover:bg-[#15883e] hover:border-[#15883e] icon hover:scale-110"
+        >
+          <BsFillPlayFill className="text-white text-xl ml-[1px]" />
+        </div>
+      )}
+    </>
   );
 };
