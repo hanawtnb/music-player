@@ -33,7 +33,6 @@ export const Right: VFC<Props> = (props: Props) => {
       })
       .then(
         (res: any) => {
-          console.log("結果", res.body.items[0].track.album);
           setRecentlyPlayed(
             res.body.items.map(({ track }: any) => {
               return {
