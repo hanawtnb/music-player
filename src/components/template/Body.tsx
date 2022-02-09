@@ -2,7 +2,7 @@ import { useSession } from "next-auth/react";
 import { memo, useEffect, useState, VFC } from "react";
 
 import Poster from "../molecules/tracks/Poster";
-import { Search } from "../molecules/Searchbar";
+import { Search } from "../molecules/Search";
 import Track from "../molecules/Track";
 
 type Props = {

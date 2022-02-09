@@ -20,8 +20,6 @@ const Track: VFC<Props> = (props: Props) => {
   const [play, setPlay] = useRecoilState(playState);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
 
-  // const accessToken = session?.accessToken;
-
   const onClickPlayMusic = () => {
     chooseTrack(track);
 
@@ -72,7 +70,7 @@ const Track: VFC<Props> = (props: Props) => {
   return (
     <div className="flex items-center justify-between space-x-20 cursor-default hover:bg-white/10 py-2 px-4 rounded-lg group transition ease-out">
       <div
-        className="items-center cursor-pointer w-full"
+        className="flex items-center cursor-pointer w-full"
         onClick={onClickPlayMusic}
       >
         <img
@@ -81,7 +79,7 @@ const Track: VFC<Props> = (props: Props) => {
           className="rounded-xl h-12 w-12 object-cover mr-3 float-left"
         />
         <span>
-          <h4 className="text-white text-sm font-semibold truncate w-[450px]">
+          <h4 className="text-white text-sm font-semibold truncate">
             {track.title}
           </h4>
 
