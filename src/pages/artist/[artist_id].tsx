@@ -1,5 +1,5 @@
 import { useSession } from "next-auth/react";
-import router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { IoMdHeart } from "react-icons/io";
 import { useRecoilState } from "recoil";
@@ -50,12 +50,11 @@ const Artist = () => {
      * アーティスト　のトップ曲を取得.
      */
     spotifyApi.getArtistTopTracks(artist_id as any, "GB").then((res: any) => {
-      console.log("トップ曲", res.body);
       setTopTracks(
         res.body.tracks.map((track: any) => {
           return {
             id: track.id,
-            name: track.name,
+            title: track.name,
             albumName: track.album.name,
             artist: track.artists.map((artist: any) => {
               return {
@@ -63,6 +62,7 @@ const Artist = () => {
                 artistId: artist.id,
               };
             }),
+            albumId: track.album.id,
             albumUrl: track.album.images[0].url,
             uri: track.uri,
           };

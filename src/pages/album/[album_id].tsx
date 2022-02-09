@@ -60,8 +60,9 @@ const Album = () => {
         res.body.items.map((track: any) => {
           return {
             id: track.track.id,
-            name: track.track.name,
+            title: track.track.name,
             albumName: track.track.album.name,
+            albumId: track.track.album.id,
             releaseDate: track.track.album.release_date,
             // description: track.track.description,
             uri: track.track.uri,
@@ -95,10 +96,13 @@ const Album = () => {
             >
               {playlist.name}
             </h1>
-            <h4 className="text-white mt-3">{playlist.description}</h4>
+            <h4 className="text-white mt-3 text-xl">{playlist.description}</h4>
             <div className="flex items-center ">
+              <span>{playlist.owner}・</span>
               <IoMdHeart />
-              <span className="text-white my-3">{playlist.followers}</span>
+              <span className="text-white my-3">
+                {playlist.followers}&nbsp;followers
+              </span>
             </div>
           </div>
         </div>

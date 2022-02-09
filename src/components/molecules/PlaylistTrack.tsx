@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { useState, VFC } from "react";
-import { AiFillHeart } from "react-icons/ai";
-import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
-import { ImHeadphones } from "react-icons/im";
+import { VFC } from "react";
 import { useRecoilState } from "recoil";
+
 import { playingTrackState, playState } from "../../atoms/playerAtom";
 import { LikePlayButton } from "./LikePlayButton";
 
@@ -17,10 +15,12 @@ type Props = {
 
 export const PlaylistTrack: VFC<Props> = (props: Props) => {
   const { track, chooseTrack, spotifyApi, accessToken, index } = props;
-
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
 
+  /**
+   * 曲を再生.
+   */
   const onClickPlayMusic = () => {
     chooseTrack(track);
 
@@ -43,7 +43,7 @@ export const PlaylistTrack: VFC<Props> = (props: Props) => {
           />
           <span>
             <h4 className="text-white text-sm font-semibold truncate w-[450px]">
-              {track.name}
+              {track.title}
             </h4>
             {track.artist.map((artist: any) => (
               <Link
@@ -63,7 +63,16 @@ export const PlaylistTrack: VFC<Props> = (props: Props) => {
           </span>
         </div>
 
-        <LikePlayButton track={track} onClickPlayMusic={onClickPlayMusic} />
+        <div className="md:ml-auto flex items-center space-x-2.5">
+          <div className="flex items-center rounded-full border-2 border-[#262626] w-[85px] h-10 relative cursor-pointer group-hover:border-white/40">
+            <LikePlayButton
+              track={track}
+              onClickPlayMusic={onClickPlayMusic}
+              spotifyApi={spotifyApi}
+              accessToken={accessToken}
+            />
+          </div>
+        </div>
       </div>
     </>
   );
