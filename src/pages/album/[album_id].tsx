@@ -154,10 +154,10 @@ const Album = () => {
             </h1>
             <h4 className="text-white mt-3 text-xl">{playlist.description}</h4>
             <div className="flex items-center ">
-              <span>{playlist.owner}・</span>
+              <span>Created by&nbsp;{playlist.owner}・</span>
               <IoMdHeart />
               <span className="text-white my-3">
-                {playlist.followers}&nbsp;followers
+                &nbsp;{playlist.followers}&nbsp;followers
               </span>
             </div>
           </div>
