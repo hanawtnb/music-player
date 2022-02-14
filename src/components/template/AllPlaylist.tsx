@@ -52,8 +52,8 @@ export const AllPlaylist: VFC<Props> = (props: Props) => {
           : playlists.map((playlist: any) => (
               <Link
                 key={playlist.id}
-                href="/album/[playlist.id]"
-                as={`/album/${playlist.id}`}
+                href="/playlist/[playlist.id]"
+                as={`/playlist/${playlist.id}`}
                 // as={`/album/${playlist.id}`}
                 passHref
               >
