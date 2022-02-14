@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { useRecoilState } from "recoil";
 
 import { playingTrackState, playState } from "../../atoms/playerAtom";
@@ -12,35 +12,23 @@ type Props = {
   spotifyApi: any;
   accessToken: any;
   index: number;
-  ownerId: string;
-  myId: string;
 };
 
-export const PlaylistTrack: VFC<Props> = (props: Props) => {
-  const { track, chooseTrack, spotifyApi, accessToken, index, ownerId, myId } =
-    props;
+export const CollectionTrack: VFC<Props> = (props: Props) => {
+  const { track, chooseTrack, spotifyApi, accessToken, index } = props;
+
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
-  const router = useRouter();
-  const { album_id } = router.query;
+  const [hasLiked, setHasLiked] = useState(false);
 
   /**
    * 曲を再生.
    */
   const onClickPlayMusic = () => {
     chooseTrack(track);
-
     if (track?.uri === playingTrack?.uri) {
       setPlay(!play);
     }
-  };
-
-  const onClickAddtoPlaylist = (id: any) => {
-    spotifyApi
-      .addTracksToPlaylist(album_id, [`spotify:track:${id}`])
-      .then((res: any) => {
-        console.log(res.body);
-      });
   };
 
   return (
@@ -75,15 +63,6 @@ export const PlaylistTrack: VFC<Props> = (props: Props) => {
               </Link>
             ))}
           </span>
-          {ownerId === myId ? (
-            <div className="text-white ">
-              <button onClick={() => onClickAddtoPlaylist(track.id) as any}>
-                Add
-              </button>
-            </div>
-          ) : (
-            ""
-          )}
         </div>
 
         <div className="md:ml-auto flex items-center space-x-2.5">

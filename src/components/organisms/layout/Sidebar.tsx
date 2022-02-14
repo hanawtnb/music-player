@@ -4,6 +4,7 @@ import {
   DotsHorizontalIcon,
   HomeIcon,
 } from "@heroicons/react/solid";
+import { AiFillHeart } from "react-icons/ai";
 import { RiCompassFill, RiPlayListFill } from "react-icons/ri";
 import Image from "next/image";
 
@@ -32,6 +33,12 @@ export const Sidebar = () => {
           <a className="flex justify-center space-x-5">
             <RiPlayListFill className="sidebarIcon text-2xl ml-5" />
             <span className="text-white">Playlists</span>
+          </a>
+        </Link>
+        <Link href="/collection">
+          <a className="flex justify-center space-x-5">
+            <AiFillHeart className="sidebarIcon text-2xl ml-10" />
+            <span className="text-white">Collection</span>
           </a>
         </Link>
       </div>

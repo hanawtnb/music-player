@@ -106,6 +106,8 @@ const Artist = () => {
                 chooseTrack={chooseTrack}
                 spotifyApi={spotifyApi}
                 accessToken={accessToken}
+                ownerId={track.id}
+                myId={track}
               />
             ))}
           </div>

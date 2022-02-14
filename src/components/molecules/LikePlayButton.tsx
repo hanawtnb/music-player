@@ -1,4 +1,4 @@
-import { useState, VFC } from "react";
+import { useEffect, useState, VFC } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { useRecoilState } from "recoil";
@@ -16,6 +16,23 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
   const [hasLiked, setHasLiked] = useState(false);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
+
+  useEffect(() => {
+    if (!accessToken) return;
+    spotifyApi.setAccessToken(accessToken);
+
+    spotifyApi
+      .getMySavedTracks({
+        limit: 50,
+      })
+      .then((res: any) => {
+        res.body.items.find(
+          (collectionTrack: any) => collectionTrack.track.id === track.id
+        )
+          ? setHasLiked(true)
+          : setHasLiked(false);
+      });
+  }, [accessToken, spotifyApi, track.id]);
 
   /**
    * お気に入りに追加.
