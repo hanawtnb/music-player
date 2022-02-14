@@ -10,11 +10,12 @@ type Props = {
 
 export const RecentlyPlayed: VFC<Props> = (props) => {
   const { chooseTrack, track } = props;
-  console.log("みる", track);
-
   const [play, setPlay] = useRecoilState(playState);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
 
+  /**
+   * 曲を再生.
+   */
   const onClickPlayMusic = () => {
     chooseTrack(track);
 
@@ -34,11 +35,6 @@ export const RecentlyPlayed: VFC<Props> = (props) => {
         <h4 className="text-white text-[13px] mb-0.5 font-semibold hover:underline cursor-pointer truncate max-w-[150px]">
           {track.title}
         </h4>
-        {/* <Link href="">
-          <p className="text-xs text-[#686868] font-semibold cursor-pointer hover:underline">
-            {track.artist}
-          </p>
-        </Link> */}
         {track.artist.map((artist: any) => (
           <Link
             key={artist.artistId}

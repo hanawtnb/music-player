@@ -35,14 +35,7 @@ export const Right: VFC<Props> = (props: Props) => {
         (res: any) => {
           setRecentlyPlayed(
             res.body.items.map(({ track }: any) => {
-              console.log("これこれ", track);
-
               return {
-                // id: track.id,
-                // artist: track.artists[0].name,
-                // title: track.name,
-                // uri: track.uri,
-                // albumUrl: track.album.images[0].url,
                 id: track.id,
                 title: track.name,
                 artist: track.artists.map((artist: any) => {
