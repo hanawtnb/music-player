@@ -42,6 +42,7 @@ export const Body: VFC<Props> = (props) => {
         res.body.tracks.items.map((track: any) => {
           return {
             id: track.id,
+            albumType: track.album_type,
             artist: track.artists.map((artist: any) => {
               return {
                 artistName: artist.name,
@@ -70,6 +71,7 @@ export const Body: VFC<Props> = (props) => {
         res.body.albums.items.map((track: any) => {
           return {
             id: track.id,
+            albumType: track.album_type,
             artist: track.artists.map((artist: any) => {
               return {
                 artistName: artist.name,
@@ -99,6 +101,8 @@ export const Body: VFC<Props> = (props) => {
                   key={track.id}
                   track={track}
                   chooseTrack={chooseTrack}
+                  spotifyApi={spotifyApi}
+                  accessToken={accessToken}
                 />
               ))
           : searchResults
@@ -108,6 +112,8 @@ export const Body: VFC<Props> = (props) => {
                   key={track.id}
                   track={track}
                   chooseTrack={chooseTrack}
+                  spotifyApi={spotifyApi}
+                  accessToken={accessToken}
                 />
               ))}
       </div>

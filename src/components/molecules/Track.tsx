@@ -34,39 +34,6 @@ const Track: VFC<Props> = (props: Props) => {
     spotifyApi.setAccessToken(accessToken);
   }, [accessToken, spotifyApi]);
 
-  /**
-   * お気に入りに追加.
-   * @param index - 追加したい曲のIndex番号
-   * @param title - 追加したい曲のステータスタイトル
-   */
-  const addPlayFavorite = (index: string, title: any): void => {
-    // if (!accessToken) return;
-    setHasLiked(true);
-    spotifyApi.getAlbumTracks([index]).then((res: any) => {
-      res.body.items.map((track: any) => {
-        if (track.name === title) {
-          return spotifyApi.addToMySavedTracks([track.id]);
-        }
-      });
-    });
-  };
-
-  /**
-   * お気に入りから削除.
-   * @param index - 削除したい曲のIndex番号
-   * @param title - 削除したい曲のタイトル
-   */
-  const removePlayFavorite = (index: string, title: any) => {
-    setHasLiked(false);
-    spotifyApi.getAlbumTracks([index]).then((res: any) => {
-      res.body.items.map((track: any) => {
-        if (track.name === title) {
-          return spotifyApi.removeFromMySavedTracks([track.id]);
-        }
-      });
-    });
-  };
-
   return (
     <div className="flex items-center justify-between space-x-20 cursor-default hover:bg-white/10 py-2 px-4 rounded-lg group transition ease-out">
       <div
@@ -79,9 +46,24 @@ const Track: VFC<Props> = (props: Props) => {
           className="rounded-xl h-12 w-12 object-cover mr-3 float-left"
         />
         <span>
-          <h4 className="text-white text-sm font-semibold truncate">
-            {track.title}
-          </h4>
+          {track.albumType == "album" ? (
+            <Link
+              key={track.id}
+              href="/album/[track.id]"
+              as={`/album/${track.id}`}
+              passHref
+            >
+              <a>
+                <h4 className="text-white text-sm font-semibold truncate hover:underline underline-offset-1">
+                  {track.title}
+                </h4>
+              </a>
+            </Link>
+          ) : (
+            <h4 className="text-white text-sm font-semibold truncate">
+              {track.title}
+            </h4>
+          )}
 
           {track.artist.map((artist: any) => (
             <Link
