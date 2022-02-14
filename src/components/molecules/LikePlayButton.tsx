@@ -2,6 +2,7 @@ import { useEffect, useState, VFC } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { useRecoilState } from "recoil";
+import { collectionState } from "../../atoms/collectionAtom";
 import { playingTrackState, playState } from "../../atoms/playerAtom";
 
 type Props = {
@@ -16,23 +17,19 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
   const [hasLiked, setHasLiked] = useState(false);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
+  const [collection, setCollection] = useRecoilState(collectionState);
 
+  /**
+   * 登録済みのお気に入りを表示.
+   * @remarks - RecoilのCollectionからお気に入り登録済みのトラックを取得して表示
+   */
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
-
-    spotifyApi
-      .getMySavedTracks({
-        limit: 50,
-      })
-      .then((res: any) => {
-        res.body.items.find(
-          (collectionTrack: any) => collectionTrack.track.id === track.id
-        )
-          ? setHasLiked(true)
-          : setHasLiked(false);
-      });
-  }, [accessToken, spotifyApi, track.id]);
+    collection.find((collectionTrack: any) => collectionTrack.id === track.id)
+      ? setHasLiked(true)
+      : setHasLiked(false);
+  }, [accessToken, collection, spotifyApi, track]);
 
   /**
    * お気に入りに追加.

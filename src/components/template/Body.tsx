@@ -85,7 +85,7 @@ export const Body: VFC<Props> = (props) => {
         })
       );
     });
-  }, [search, accessToken, spotifyApi]);
+  }, [accessToken, spotifyApi]);
 
   return (
     <section className="my-[20px] bg-black ml-52 space-y-7 md:max-w-6xl flex-grow md:mr-2.5">

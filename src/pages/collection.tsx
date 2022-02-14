@@ -26,38 +26,6 @@ const Collection = () => {
     setPlayingTrack(track);
   };
 
-  // アクセストークンを設定
-  useEffect(() => {
-    if (!accessToken) return;
-    spotifyApi.setAccessToken(accessToken);
-
-    spotifyApi
-      .getMySavedTracks({
-        limit: 50,
-      })
-      .then((res: any) => {
-        setMyCollectionTotal(res.body.total);
-        setCollection(
-          res.body.items.map((track: any) => {
-            return {
-              id: track.track.id,
-              title: track.track.name,
-              artist: track.track.artists.map((artist: any) => {
-                return {
-                  artistName: artist.name,
-                  artistId: artist.id,
-                };
-              }),
-              albumUrl: track.track.album.images[0].url,
-              albumId: track.track.album.id,
-              uri: track.track.uri,
-            };
-          })
-        );
-      });
-  }, [accessToken, setCollection, spotifyApi]);
-  //   console.log("おきに", myCollection);
-
   return (
     <>
       <SidebarLayout>
