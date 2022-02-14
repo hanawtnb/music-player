@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { VFC } from "react";
 import { useRecoilState } from "recoil";
 import { playingTrackState, playState } from "../../atoms/playerAtom";
@@ -9,6 +10,8 @@ type Props = {
 
 export const RecentlyPlayed: VFC<Props> = (props) => {
   const { chooseTrack, track } = props;
+  console.log("みる", track);
+
   const [play, setPlay] = useRecoilState(playState);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
 
@@ -31,9 +34,26 @@ export const RecentlyPlayed: VFC<Props> = (props) => {
         <h4 className="text-white text-[13px] mb-0.5 font-semibold hover:underline cursor-pointer truncate max-w-[150px]">
           {track.title}
         </h4>
-        <p className="text-xs text-[#686868] font-semibold cursor-pointer hover:underline">
-          {track.artist}
-        </p>
+        {/* <Link href="">
+          <p className="text-xs text-[#686868] font-semibold cursor-pointer hover:underline">
+            {track.artist}
+          </p>
+        </Link> */}
+        {track.artist.map((artist: any) => (
+          <Link
+            key={artist.artistId}
+            href="/artist/[artist.artistId]"
+            as={`/artist/${artist.artistId}`}
+            passHref
+          >
+            <a>
+              <span className="text-sm text-[#686868] font-semibold cursor-pointer hover:underline">
+                {artist.artistName}
+                &nbsp;
+              </span>
+            </a>
+          </Link>
+        ))}
       </div>
     </div>
   );

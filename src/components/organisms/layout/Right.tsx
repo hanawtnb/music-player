@@ -35,12 +35,24 @@ export const Right: VFC<Props> = (props: Props) => {
         (res: any) => {
           setRecentlyPlayed(
             res.body.items.map(({ track }: any) => {
+              console.log("これこれ", track);
+
               return {
+                // id: track.id,
+                // artist: track.artists[0].name,
+                // title: track.name,
+                // uri: track.uri,
+                // albumUrl: track.album.images[0].url,
                 id: track.id,
-                artist: track.artists[0].name,
                 title: track.name,
-                uri: track.uri,
+                artist: track.artists.map((artist: any) => {
+                  return {
+                    artistName: artist.name,
+                    artistId: artist.id,
+                  };
+                }),
                 albumUrl: track.album.images[0].url,
+                uri: track.uri,
               };
             })
           );
@@ -53,7 +65,7 @@ export const Right: VFC<Props> = (props: Props) => {
 
   return (
     <>
-      <section className="space-y-8 pr-8 pt-4">
+      <section className="space-y-8 pr-8 pt-4 w-80">
         <div className="flex space-x-2 items-center justify-between">
           <Dropdown />
         </div>
