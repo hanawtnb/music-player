@@ -5,3 +5,8 @@ export const collectionState = atom({
   key: "collectionState",
   default: [] as any,
 });
+
+export const myCollectionTotalState = atom({
+  key: "myCollectionTotalState",
+  default: 0,
+});

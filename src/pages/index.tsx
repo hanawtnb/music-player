@@ -12,7 +12,6 @@ import { playingTrackState } from "../atoms/playerAtom";
 import { Body } from "../components/template/Body";
 import { SidebarLayout } from "../components/template/SidebarLayout";
 import { Loader } from "../components/atoms/Loader";
-import { collectionState } from "../atoms/collectionAtom";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
@@ -24,8 +23,7 @@ export default function Home() {
   const { data: session } = useSession();
   const accessToken: any = session?.accessToken;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
-  const [collection, setCollection] = useRecoilState(collectionState);
-  const [myCollectionTotal, setMyCollectionTotal] = useState(0);
+
   // プレイヤーバーの表示ステータス
   const [showPlayer, setShowPlayer] = useState(false);
 
@@ -46,40 +44,6 @@ export default function Home() {
       router.push("/auth/signin");
     },
   });
-
-  // アクセストークンを設定
-  useEffect(() => {
-    if (!accessToken) return;
-    spotifyApi.setAccessToken(accessToken);
-
-    /**
-     * お気に入りを取得.
-     */
-    spotifyApi
-      .getMySavedTracks({
-        limit: 50,
-      })
-      .then((res: any) => {
-        setMyCollectionTotal(res.body.total);
-        setCollection(
-          res.body.items.map((track: any) => {
-            return {
-              id: track.track.id,
-              title: track.track.name,
-              artist: track.track.artists.map((artist: any) => {
-                return {
-                  artistName: artist.name,
-                  artistId: artist.id,
-                };
-              }),
-              albumUrl: track.track.album.images[0].url,
-              albumId: track.track.album.id,
-              uri: track.track.uri,
-            };
-          })
-        );
-      });
-  }, [accessToken, setCollection]);
 
   if (status === "loading") {
     return <Loader />;
