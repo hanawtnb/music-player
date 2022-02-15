@@ -10,6 +10,7 @@ type Props = {
 
 export const RecentlyPlayed: VFC<Props> = (props) => {
   const { chooseTrack, track } = props;
+
   const [play, setPlay] = useRecoilState(playState);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
 

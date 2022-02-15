@@ -1,7 +1,4 @@
-import { ViewGridIcon } from "@heroicons/react/solid";
-import { useSession } from "next-auth/react";
 import { useEffect, useState, VFC } from "react";
-import PrimaryButton from "../../atoms/button/PrimaryButton";
 import { Dropdown } from "../../molecules/Dropdown";
 import { RecentlyPlayed } from "../RecentlyPlayed";
 
@@ -13,9 +10,7 @@ type Props = {
 
 export const Right: VFC<Props> = (props: Props) => {
   const { spotifyApi, chooseTrack, accessToken } = props;
-  const { data: session } = useSession();
-  // const accessToken = session?.accessToken;
-  const [recentlyPlayed, setRecentlyPlayed] = useState([]);
+  const [recentlyPlayed, setRecentlyPlayed] = useState<any>([]);
 
   // アクセストークンを設定
   useEffect(() => {
@@ -26,35 +21,38 @@ export const Right: VFC<Props> = (props: Props) => {
   //最近再生された曲
   useEffect(() => {
     if (!accessToken) return;
-
+    const playedTrack = new Array<any>();
     spotifyApi
       .getMyRecentlyPlayedTracks({
-        limit: 20,
+        limit: 50,
       })
-      .then(
-        (res: any) => {
-          setRecentlyPlayed(
-            res.body.items.map(({ track }: any) => {
-              return {
-                id: track.id,
-                title: track.name,
-                artist: track.artists.map((artist: any) => {
-                  return {
-                    artistName: artist.name,
-                    artistId: artist.id,
-                  };
-                }),
-                albumUrl: track.album.images[0].url,
-                uri: track.uri,
-              };
-            })
-          );
-        },
-        (err: any) => {
-          console.log("Something went wrong!", err);
-        }
-      );
+      .then((res: any) => {
+        setRecentlyPlayed(
+          res.body.items.map(({ track }: any) => {
+            return {
+              id: track.id,
+              title: track.name,
+              artist: track.artists.map((artist: any) => {
+                return {
+                  artistName: artist.name,
+                  artistId: artist.id,
+                };
+              }),
+              albumUrl: track.album.images[0].url,
+              uri: track.uri,
+            };
+          })
+        );
+      });
   }, [accessToken, spotifyApi]);
+
+  const result = recentlyPlayed.filter((item: any, index: any, self: any) => {
+    const trackId = self.map((item: any) => item["id"]);
+    // 重複を削除する
+    if (trackId.indexOf(item.id) === index) {
+      return item;
+    }
+  });
 
   return (
     <>
@@ -68,10 +66,9 @@ export const Right: VFC<Props> = (props: Props) => {
             <h4 className="text-white font-semibold text-sm ">
               Recently Played
             </h4>
-            <ViewGridIcon className="text-[#686868] h-6" />
           </div>
           <div className="space-y-4 overflow-y-scroll overflow-x-hidden h-[250px] md:h-[680px] scrollbar-hide">
-            {recentlyPlayed.map((track: any, index: number) => (
+            {result.map((track: any, index: number) => (
               <RecentlyPlayed
                 key={index}
                 track={track}
