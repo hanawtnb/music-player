@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
 
 import { playingTrackState } from "../../atoms/playerAtom";
-import { PlaylistTrack } from "../../components/molecules/PlaylistTrack";
+import { ArtistTrack } from "../../components/molecules/ArtistTrack";
 import { SidebarLayout } from "../../components/template/SidebarLayout";
 
 const spotifyApi = new SpotifyWebApi({
@@ -69,7 +69,7 @@ const Artist = () => {
         })
       );
     });
-  }, [accessToken, artist_id]);
+  }, [accessToken, spotifyApi]);
 
   return (
     <>
@@ -99,7 +99,7 @@ const Artist = () => {
           </div>
           <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
             {topTracks.map((track: any, index: number) => (
-              <PlaylistTrack
+              <ArtistTrack
                 key={track.id}
                 index={index}
                 track={track}
