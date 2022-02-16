@@ -2,7 +2,10 @@ import { useEffect, useState, VFC } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { useRecoilState } from "recoil";
-import { collectionState } from "../../atoms/collectionAtom";
+import {
+  collectionState,
+  myCollectionTotalState,
+} from "../../atoms/collectionAtom";
 import { playingTrackState, playState } from "../../atoms/playerAtom";
 
 type Props = {
@@ -18,6 +21,39 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
   const [collection, setCollection] = useRecoilState(collectionState);
+  const [myCollectionTotal, setMyCollectionTotal] = useRecoilState(
+    myCollectionTotalState
+  );
+
+  useEffect(() => {
+    /**
+     * お気に入りを取得.
+     */
+    spotifyApi
+      .getMySavedTracks({
+        limit: 50,
+      })
+      .then((res: any) => {
+        setMyCollectionTotal(res.body.total);
+        setCollection(
+          res.body.items.map((track: any) => {
+            return {
+              id: track.track.id,
+              title: track.track.name,
+              artist: track.track.artists.map((artist: any) => {
+                return {
+                  artistName: artist.name,
+                  artistId: artist.id,
+                };
+              }),
+              albumUrl: track.track.album.images[0].url,
+              albumId: track.track.album.id,
+              uri: track.track.uri,
+            };
+          })
+        );
+      });
+  }, [accessToken, setCollection, setMyCollectionTotal, spotifyApi]);
 
   /**
    * 登録済みのお気に入りを表示.
@@ -29,24 +65,32 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
     collection.find((collectionTrack: any) => collectionTrack.id === track.id)
       ? setHasLiked(true)
       : setHasLiked(false);
-  }, [accessToken, collection, spotifyApi, track]);
+  }, [accessToken, collection, spotifyApi, track.id]);
 
   /**
    * お気に入りに追加.
    * @param index - 追加したい曲のIndex番号
    * @param title - 追加したい曲のステータスタイトル
    */
-  const addPlayFavorite = (id: string, title: any): void => {
+  const addPlayFavorite = (track: any): void => {
     if (!accessToken) return;
     setHasLiked(true);
 
-    spotifyApi.getAlbumTracks([id]).then((res: any) => {
-      res.body.items.map((track: any) => {
-        if (track.name === title) {
-          return spotifyApi.addToMySavedTracks([track.id]);
-        }
-      });
-    });
+    track.albumId
+      ? spotifyApi.getAlbumTracks([track.albumId]).then((res: any) => {
+          res.body.items.map((albumTrack: any) => {
+            if (albumTrack.name === track.title) {
+              return spotifyApi.addToMySavedTracks([albumTrack.id]);
+            }
+          });
+        })
+      : spotifyApi.getAlbumTracks([track.id]).then((res: any) => {
+          res.body.items.map((albumTrack: any) => {
+            if (albumTrack.name === track.title) {
+              return spotifyApi.addToMySavedTracks([albumTrack.id]);
+            }
+          });
+        });
   };
 
   /**
@@ -54,15 +98,25 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
    * @param index - 削除したい曲のIndex番号
    * @param title - 削除したい曲のタイトル
    */
-  const removePlayFavorite = (id: string, title: any) => {
+  const removePlayFavorite = (track: any) => {
+    if (!accessToken) return;
     setHasLiked(false);
-    spotifyApi.getAlbumTracks([id]).then((res: any) => {
-      res.body.items.map((track: any) => {
-        if (track.name === title) {
-          return spotifyApi.removeFromMySavedTracks([track.id]);
-        }
-      });
-    });
+
+    track.albumId
+      ? spotifyApi.getAlbumTracks([track.albumId]).then((res: any) => {
+          res.body.items.map((albumTrack: any) => {
+            if (albumTrack.name === track.title) {
+              return spotifyApi.removeFromMySavedTracks([albumTrack.id]);
+            }
+          });
+        })
+      : spotifyApi.getAlbumTracks([track.id]).then((res: any) => {
+          res.body.items.map((albumTrack: any) => {
+            if (albumTrack.name === track.title) {
+              return spotifyApi.removeFromMySavedTracks([albumTrack.id]);
+            }
+          });
+        });
   };
 
   return (
@@ -73,8 +127,8 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
         }`}
         onClick={
           hasLiked
-            ? () => removePlayFavorite(track.albumId, track.title) as any
-            : () => addPlayFavorite(track.albumId, track.title) as any
+            ? () => removePlayFavorite(track) as any
+            : () => addPlayFavorite(track) as any
         }
       />
       {track.uri === playingTrack?.uri && play ? (
