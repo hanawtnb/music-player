@@ -16,7 +16,7 @@ type Props = {
   myId: string;
 };
 
-export const PlaylistTrack: VFC<Props> = (props: Props) => {
+export const MyPlaylistTrack: VFC<Props> = (props: Props) => {
   const { track, chooseTrack, spotifyApi, accessToken, index, ownerId, myId } =
     props;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
@@ -74,9 +74,41 @@ export const PlaylistTrack: VFC<Props> = (props: Props) => {
   /**
    * 曲をプレイリストに追加.
    */
-  const onClickAddtoPlaylist = (track: any) => {
+  const onClickRemoveFromPlaylist = (track: any) => {
     if (!accessToken) return;
-    spotifyApi.addTracksToPlaylist(playlist_id, [track.uri]);
+    // console.log("ぷれいりすt", playlistTracks);
+    spotifyApi.removeTracksFromPlaylist(playlist_id, [{ uri: track.uri }], {
+      snapshot_id: snapshot_id,
+    });
+
+    // console.log("miru", track);
+    // playlistTracks.indexOf((playlistTrack: any) => {
+    //   playlistTrack.id === track.id;
+    // })
+    //   ? spotifyApi.removeTracksFromPlaylist(
+    //       playlist_id,
+    //       [track.uri],
+    //       snapshot_id
+    //     )
+    //   : spotifyApi.addTracksToPlaylist(playlist_id, [track.uri]);
+
+    // if (track.id in playlistTracks) {
+    //   console.log("そんざいする");
+    // } else {
+    //   console.log("そんざいしない");
+    // }
+    // const result = playlistTracks.some(
+    //   (playlistTrack: any) => playlistTrack.id == [track.id]
+    // );
+    // if (result) {
+    //   console.log("そんざいする", track.id);
+    //   spotifyApi.removeTracksFromPlaylist(playlist_id, [{ uri: track.uri }], {
+    //     snapshot_id: snapshot_id,
+    //   });
+    // } else {
+    //   console.log("そんざいしない", track.id);
+    //   spotifyApi.addTracksToPlaylist(playlist_id, [track.uri]);
+    // }
   };
 
   return (
@@ -117,10 +149,10 @@ export const PlaylistTrack: VFC<Props> = (props: Props) => {
           {ownerId === myId ? (
             <span className="text-white related left-100">
               <button
-                className="border rounded-full w-20 h-10 hover:cursor-pointer hover:bg-[#15883e]"
-                onClick={() => onClickAddtoPlaylist(track) as any}
+                className="border rounded-full w-24 h-10 hover:cursor-pointer hover:bg-[#15883e]"
+                onClick={() => onClickRemoveFromPlaylist(track) as any}
               >
-                Add
+                Remove
               </button>
             </span>
           ) : (

@@ -7,6 +7,7 @@ import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
 
 import { playingTrackState } from "../../atoms/playerAtom";
+import { MyPlaylistTrack } from "../../components/molecules/MyPlaylistTrack";
 import { PlaylistTrack } from "../../components/molecules/PlaylistTrack";
 import { Search } from "../../components/Searchbar";
 import { SidebarLayout } from "../../components/template/SidebarLayout";
@@ -165,7 +166,7 @@ const Album = () => {
           <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
             {playlistTracks.map((track: any, index: number) => (
               <PlaylistTrack
-                key={track.id}
+                key={index}
                 index={index}
                 track={track}
                 chooseTrack={chooseTrack}
@@ -180,8 +181,8 @@ const Album = () => {
           <>
             <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
               {playlistTracks.map((track: any, index: number) => (
-                <PlaylistTrack
-                  key={track.id}
+                <MyPlaylistTrack
+                  key={index}
                   index={index}
                   track={track}
                   chooseTrack={chooseTrack}
@@ -200,7 +201,7 @@ const Album = () => {
               <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
                 {searchResults.map((track: any, index: number) => (
                   <PlaylistTrack
-                    key={track.id}
+                    key={index}
                     index={index}
                     track={track}
                     chooseTrack={chooseTrack}
