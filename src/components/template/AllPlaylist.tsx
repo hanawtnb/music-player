@@ -25,11 +25,12 @@ export const AllPlaylist: VFC<Props> = (props: Props) => {
     if (!accessToken) {
       return;
     }
-    console.log(session?.user?.name);
+    /**
+     * ログインユーザーのプレイリストを取得.
+     */
     spotifyApi
       .getUserPlaylists(session?.user?.id, { limit: 50, offset: 0 })
       .then((res: any) => {
-        console.log(res);
         setPlaylists(
           res.body.items.map((playlist: any) => {
             return {

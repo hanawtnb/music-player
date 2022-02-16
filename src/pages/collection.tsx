@@ -43,8 +43,6 @@ const Collection = () => {
         limit: 50,
       })
       .then((res: any) => {
-        console.log(res.body);
-
         setMyCollectionTotal(res.body.total);
         setCollection(
           res.body.items.map((track: any) => {
@@ -64,7 +62,7 @@ const Collection = () => {
           })
         );
       });
-  }, [accessToken, setCollection, setMyCollectionTotal]);
+  }, [accessToken, setCollection, setMyCollectionTotal, spotifyApi]);
 
   return (
     <>

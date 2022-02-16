@@ -16,7 +16,6 @@ const Track: VFC<Props> = (props: Props) => {
   const { track, chooseTrack, spotifyApi, accessToken } = props;
 
   // お気に入り登録
-  const [hasLiked, setHasLiked] = useState(false);
   const [play, setPlay] = useRecoilState(playState);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
 

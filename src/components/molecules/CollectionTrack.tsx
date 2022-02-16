@@ -17,7 +17,6 @@ export const CollectionTrack: VFC<Props> = (props: Props) => {
   const { track, chooseTrack, spotifyApi, accessToken, index } = props;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
-  const [hasLiked, setHasLiked] = useState(false);
 
   /**
    * 曲を再生.
