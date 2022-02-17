@@ -75,29 +75,30 @@ const Album = () => {
     /**
      * プレイリストの曲を取得.
      */
-    spotifyApi.getPlaylistTracks([playlist_id] as any).then((res: any) => {
-      setPlaylistTracks(
-        res.body.items.map((track: any) => {
-          return {
-            id: track.track.id,
-            title: track.track.name,
-            albumName: track.track.album.name,
-            albumId: track.track.album.id,
-            releaseDate: track.track.album.release_date,
-            // description: track.track.description,
-            uri: track.track.uri,
-            albumUrl: track.track.album.images[0].url,
-            artist: track.track.artists?.map((artist: any) => {
-              return {
-                artistName: artist.name,
-                artistId: artist.id,
-              };
-            }),
-          };
-        })
-      );
-    });
-  }, [accessToken, playlist_id, search]);
+    spotifyApi
+      .getPlaylistTracks([playlist_id] as any, { limit: 40 })
+      .then((res: any) => {
+        setPlaylistTracks(
+          res.body.items.map((track: any) => {
+            return {
+              id: track.track.id,
+              title: track.track.name,
+              albumName: track.track.album.name,
+              albumId: track.track.album.id,
+              releaseDate: track.track.album.release_date,
+              uri: track.track.uri,
+              albumUrl: track.track.album.images[0].url,
+              artist: track.track.artists?.map((artist: any) => {
+                return {
+                  artistName: artist.name,
+                  artistId: artist.id,
+                };
+              }),
+            };
+          })
+        );
+      });
+  }, [accessToken, playlist_id]);
 
   /**
    * 曲を検索.
@@ -118,6 +119,7 @@ const Album = () => {
               };
             }),
             title: track.name,
+            albumId: track.album.id,
             albumName: track.album.name,
             //音楽を再生するために使う。
             uri: track.uri,
@@ -127,7 +129,7 @@ const Album = () => {
         })
       );
     });
-  }, [search, accessToken, myInfo, playlist]);
+  }, [accessToken, search]);
 
   return (
     <SidebarLayout>
