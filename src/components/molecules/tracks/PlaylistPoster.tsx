@@ -1,7 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { memo, useCallback, useState, VFC } from "react";
-import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
-import { HiOutlineMusicNote } from "react-icons/hi";
+import { memo, useState, VFC } from "react";
 import { useRecoilState } from "recoil";
 import { playingTrackState, playState } from "../../../atoms/playerAtom";
 import { PlaylistImage } from "../../atoms/image/PlaylistImage";
@@ -12,12 +10,7 @@ type Props = {
 };
 
 const Poster: VFC<Props> = (props) => {
-  const [hasLiked, setHasLiked] = useState(false);
-  const { playlist, chooseTrack } = props;
-  const [play, setPlay] = useRecoilState(playState);
-  const [playingTrack, setPlayingTrack] = useRecoilState(
-    playingTrackState
-  ) as any;
+  const { playlist } = props;
 
   return (
     <>

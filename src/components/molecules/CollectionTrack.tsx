@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useEffect, useState, VFC } from "react";
+import { VFC } from "react";
 import { useRecoilState } from "recoil";
 
 import { playingTrackState, playState } from "../../atoms/playerAtom";
