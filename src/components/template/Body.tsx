@@ -65,10 +65,13 @@ export const Body: VFC<Props> = (props) => {
    */
   useEffect(() => {
     if (!accessToken) return;
-
+    const tempNewRelease: any = new Array();
     spotifyApi.getNewReleases().then((res: any) => {
+      const result = res.body.albums.items.filter(
+        (track: any) => track.album_type === "single"
+      );
       setNewReleases(
-        res.body.albums.items.map((track: any) => {
+        result.map((track: any) => {
           return {
             id: track.id,
             albumType: track.album_type,
@@ -82,7 +85,6 @@ export const Body: VFC<Props> = (props) => {
             //音楽を再生するために使う。
             uri: track.uri,
             albumUrl: track.images[0].url,
-            // popularity: track.popularity,
           };
         })
       );
@@ -92,7 +94,7 @@ export const Body: VFC<Props> = (props) => {
   return (
     <section className="my-[20px] bg-black ml-52 space-y-7 md:max-w-6xl flex-grow md:mr-2.5">
       <Search search={search} setSearch={setSearch} />
-      <div className="grid overflow-y-scroll scrollbar-hide py-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8 p-4">
+      <div className="grid overflow-y-scroll scrollbar-hide grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
         {searchResults.length === 0
           ? newReleases
               .slice(0, 4)
@@ -123,7 +125,7 @@ export const Body: VFC<Props> = (props) => {
           <h2 className="text-white font-bold mb-3 mt-0">
             {searchResults.length === 0 ? "New Releases" : "Tracks"}
           </h2>
-          <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll h-[1000px] md:h-96 scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500 w-[1090px] sm:w-[70px] md:w-[800px] xl:w-[1090px]">
+          <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 xl:h-[355px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500 w-[1090px] sm:w-[70px] md:w-[800px] xl:w-[1090px]">
             {searchResults.length === 0
               ? newReleases
                   .slice(4, newReleases.length)
