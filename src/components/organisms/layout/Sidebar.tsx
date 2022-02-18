@@ -5,8 +5,8 @@ import { AiFillHeart } from "react-icons/ai";
 import { RiPlayListFill } from "react-icons/ri";
 import Image from "next/image";
 
-import Link from "next/Link";
 import { memo } from "react";
+import Link from "next/link";
 
 export const Sidebar = memo(() => {
   return (
