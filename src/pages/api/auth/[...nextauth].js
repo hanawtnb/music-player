@@ -26,7 +26,7 @@ async function refreshAccessToken(token) {
       method: "POST",
     });
 
-    const refreshedTokens = await response.JSON.parse();
+    const refreshedTokens = await response.json();
 
     if (!response.ok) {
       throw refreshedTokens;
