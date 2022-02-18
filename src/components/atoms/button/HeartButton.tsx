@@ -1,4 +1,5 @@
-import { memo, ReactNode, useEffect, useState, VFC } from "react";
+/* eslint-disable react/display-name */
+import { memo, useEffect, useState, VFC } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { useRecoilState } from "recoil";
 import { collectionState } from "../../../atoms/collectionAtom";
@@ -9,11 +10,11 @@ type Props = {
   accessToken: any;
 };
 
-const HeartButton: VFC<Props> = (props: Props) => {
+export const HeartButton: VFC<Props> = memo((props: Props) => {
   const [hasLiked, setHasLiked] = useState(false);
   const { track, spotifyApi, accessToken } = props;
 
-  const [collection, setCollection] = useRecoilState(collectionState);
+  const [collection] = useRecoilState(collectionState);
 
   /**
    * 登録済みのお気に入りを表示.
@@ -72,6 +73,4 @@ const HeartButton: VFC<Props> = (props: Props) => {
       }
     />
   );
-};
-
-export default memo(HeartButton);
+});

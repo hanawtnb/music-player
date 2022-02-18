@@ -1,5 +1,6 @@
+/* eslint-disable react/display-name */
 import SpotifyPlayer from "react-spotify-web-playback";
-import { useEffect, VFC } from "react";
+import { memo, useEffect, VFC } from "react";
 import { useRecoilState } from "recoil";
 
 import { playingTrackState, playState } from "../../../atoms/playerAtom";
@@ -9,7 +10,7 @@ type Props = {
   trackUri: string;
 };
 
-export const Player: VFC<Props> = (props) => {
+export const Player: VFC<Props> = memo((props) => {
   const { accessToken, trackUri } = props;
   const [play, setPlay] = useRecoilState(playState);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
@@ -50,4 +51,4 @@ export const Player: VFC<Props> = (props) => {
       />
     </div>
   );
-};
+});

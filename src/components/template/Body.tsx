@@ -1,16 +1,17 @@
+/* eslint-disable react/display-name */
 import { useSession } from "next-auth/react";
 import { memo, useEffect, useState, VFC } from "react";
 
-import Poster from "../molecules/tracks/Poster";
+import { Poster } from "../molecules/tracks/Poster";
 import { Search } from "../molecules/Search";
-import Track from "../molecules/Track";
+import { Track } from "../molecules/Track";
 
 type Props = {
   spotifyApi: any;
   chooseTrack: (arg0: any) => any;
 };
 
-export const Body: VFC<Props> = (props) => {
+export const Body: VFC<Props> = memo((props: Props) => {
   const { spotifyApi, chooseTrack } = props;
   //クライアント再度でセッションを取得する時はuseSessionで、サーバー再度の時はgetSession
   const { data: session } = useSession();
@@ -28,7 +29,7 @@ export const Body: VFC<Props> = (props) => {
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
-  }, [accessToken, spotifyApi]);
+  }, [accessToken]);
 
   /**
    * 曲を検索.
@@ -58,7 +59,7 @@ export const Body: VFC<Props> = (props) => {
         })
       );
     });
-  }, [search, accessToken, spotifyApi]);
+  }, [search, accessToken]);
 
   /**
    * 新着の曲を取得.
@@ -89,7 +90,7 @@ export const Body: VFC<Props> = (props) => {
         })
       );
     });
-  }, [accessToken, spotifyApi]);
+  }, [accessToken]);
 
   return (
     <section className="my-[20px] bg-black ml-52 space-y-7 md:max-w-6xl flex-grow md:mr-2.5">
@@ -154,4 +155,4 @@ export const Body: VFC<Props> = (props) => {
       </div>
     </section>
   );
-};
+});

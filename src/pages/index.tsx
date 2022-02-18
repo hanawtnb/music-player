@@ -6,22 +6,22 @@ import { useSession } from "next-auth/react";
 
 import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { playingTrackState } from "../atoms/playerAtom";
 import { Body } from "../components/template/Body";
 import { SidebarLayout } from "../components/template/SidebarLayout";
 import { Loader } from "../components/atoms/Loader";
+import { NextPage } from "next";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
 });
 
-export default function Home() {
+const Home: NextPage = () => {
   const router = useRouter();
   //playerを表示させるために必要
   const { data: session } = useSession();
-  const accessToken: any = session?.accessToken;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
 
   // プレイヤーバーの表示ステータス
@@ -33,9 +33,13 @@ export default function Home() {
   }, []);
 
   //曲を再生
-  const chooseTrack = (track: any): any => {
-    setPlayingTrack(track);
-  };
+  const chooseTrack = useCallback(
+    (track: any): any => {
+      setPlayingTrack(track);
+    },
+    [setPlayingTrack]
+  );
+
   // useSessionで session 情報と status 状態を保持する変数を作成
   const { status } = useSession({
     required: true,
@@ -62,4 +66,6 @@ export default function Home() {
       </SidebarLayout>
     </div>
   );
-}
+};
+
+export default Home;

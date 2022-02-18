@@ -1,4 +1,5 @@
-import { useEffect, useState, VFC } from "react";
+/* eslint-disable react/display-name */
+import { memo, useEffect, useState, VFC } from "react";
 import { Dropdown } from "../../molecules/Dropdown";
 import { RecentlyPlayed } from "../RecentlyPlayed";
 
@@ -8,7 +9,7 @@ type Props = {
   accessToken: any;
 };
 
-export const Right: VFC<Props> = (props: Props) => {
+export const Right: VFC<Props> = memo((props: Props) => {
   const { spotifyApi, chooseTrack, accessToken } = props;
   const [recentlyPlayed, setRecentlyPlayed] = useState<any>([]);
 
@@ -81,4 +82,4 @@ export const Right: VFC<Props> = (props: Props) => {
       ;
     </>
   );
-};
+});

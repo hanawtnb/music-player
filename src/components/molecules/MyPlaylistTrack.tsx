@@ -1,7 +1,11 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react/display-name */
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState, VFC } from "react";
+import { memo, useCallback, useEffect, useState, VFC } from "react";
 import { useRecoilState } from "recoil";
+import SpotifyWebApi from "spotify-web-api-node";
 
 import { playingTrackState, playState } from "../../atoms/playerAtom";
 import { LikePlayButton } from "./LikePlayButton";
@@ -9,35 +13,56 @@ import { LikePlayButton } from "./LikePlayButton";
 type Props = {
   track: any;
   chooseTrack: (arg1: any) => void;
-  spotifyApi: any;
-  accessToken: any;
   index: number;
   ownerId: string;
   myId: string;
 };
 
-export const MyPlaylistTrack: VFC<Props> = (props: Props) => {
-  const { track, chooseTrack, spotifyApi, accessToken, index, ownerId, myId } =
-    props;
+export const MyPlaylistTrack: VFC<Props> = memo((props: Props) => {
+  const { track, chooseTrack, index, ownerId, myId } = props;
+  const { data: session } = useSession();
+  const accessToken: any = session?.accessToken;
+  const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+  });
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
   const router = useRouter();
-  const { playlist_id } = router.query;
+  const { playlist_id }: any = router.query;
   const [playlistTracks, setPlaylistTrack] = useState<any>([]);
   const [snapshot_id, setSnapshot_id] = useState() as any;
+
+  // アクセストークンを設定
+  useEffect(() => {
+    if (!accessToken) return;
+    spotifyApi.setAccessToken(accessToken);
+    console.log("アクセストークン");
+  }, [accessToken]);
 
   /**
    * 曲を再生.
    */
-  const onClickPlayMusic = () => {
+  const onClickPlayMusic = useCallback(() => {
     chooseTrack(track);
 
     if (track?.uri === playingTrack?.uri) {
       setPlay(!play);
     }
+  }, [accessToken, setPlay]);
+
+  /**
+   * 曲をプレイリストから削除
+   */
+  const onClickRemoveFromPlaylist = (track: any) => {
+    spotifyApi.setAccessToken(accessToken);
+    spotifyApi.removeTracksFromPlaylist(playlist_id, [{ uri: track.uri }], {
+      snapshot_id: snapshot_id,
+    });
+    console.log("さくじょ");
   };
 
   useEffect(() => {
+    spotifyApi.setAccessToken(accessToken);
     /**
      *プレイリストを取得.
      */
@@ -47,69 +72,35 @@ export const MyPlaylistTrack: VFC<Props> = (props: Props) => {
     /**
      * プレイリストの曲を取得.
      */
-    spotifyApi.getPlaylistTracks([playlist_id] as any).then((res: any) => {
-      setPlaylistTrack(
-        res.body.items.map((track: any) => {
-          return {
-            id: track.track.id,
-            title: track.track.name,
-            albumName: track.track.album.name,
-            albumId: track.track.album.id,
-            releaseDate: track.track.album.release_date,
-            // description: track.track.description,
-            uri: track.track.uri,
-            albumUrl: track.track.album.images[0].url,
-            artist: track.track.artists?.map((artist: any) => {
-              return {
-                artistName: artist.name,
-                artistId: artist.id,
-              };
-            }),
-          };
-        })
-      );
-    });
-  }, [playlist_id, spotifyApi]);
-
-  /**
-   * 曲をプレイリストに追加.
-   */
-  const onClickRemoveFromPlaylist = (track: any) => {
-    if (!accessToken) return;
-    // console.log("ぷれいりすt", playlistTracks);
-    spotifyApi.removeTracksFromPlaylist(playlist_id, [{ uri: track.uri }], {
-      snapshot_id: snapshot_id,
-    });
-
-    // console.log("miru", track);
-    // playlistTracks.indexOf((playlistTrack: any) => {
-    //   playlistTrack.id === track.id;
-    // })
-    //   ? spotifyApi.removeTracksFromPlaylist(
-    //       playlist_id,
-    //       [track.uri],
-    //       snapshot_id
-    //     )
-    //   : spotifyApi.addTracksToPlaylist(playlist_id, [track.uri]);
-
-    // if (track.id in playlistTracks) {
-    //   console.log("そんざいする");
-    // } else {
-    //   console.log("そんざいしない");
-    // }
-    // const result = playlistTracks.some(
-    //   (playlistTrack: any) => playlistTrack.id == [track.id]
-    // );
-    // if (result) {
-    //   console.log("そんざいする", track.id);
-    //   spotifyApi.removeTracksFromPlaylist(playlist_id, [{ uri: track.uri }], {
-    //     snapshot_id: snapshot_id,
-    //   });
-    // } else {
-    //   console.log("そんざいしない", track.id);
-    //   spotifyApi.addTracksToPlaylist(playlist_id, [track.uri]);
-    // }
-  };
+    spotifyApi
+      .getPlaylistTracks([playlist_id] as any, {
+        limit: 40,
+        fields: "items",
+      })
+      .then((res: any) => {
+        setPlaylistTrack(
+          res.body.items.map((track: any) => {
+            return {
+              id: track.track.id,
+              title: track.track.name,
+              albumName: track.track.album.name,
+              albumId: track.track.album.id,
+              releaseDate: track.track.album.release_date,
+              // description: track.track.description,
+              uri: track.track.uri,
+              albumUrl: track.track.album.images[0].url,
+              artist: track.track.artists?.map((artist: any) => {
+                return {
+                  artistName: artist.name,
+                  artistId: artist.id,
+                };
+              }),
+            };
+          })
+        );
+      });
+    console.log("よばれる");
+  }, []);
 
   return (
     <>
@@ -159,15 +150,10 @@ export const MyPlaylistTrack: VFC<Props> = (props: Props) => {
             ""
           )}
           <div className="flex items-center rounded-full border-2 border-[#262626] w-[85px] h-10 relative cursor-pointer group-hover:border-white/40">
-            <LikePlayButton
-              track={track}
-              onClickPlayMusic={onClickPlayMusic}
-              spotifyApi={spotifyApi}
-              accessToken={accessToken}
-            />
+            <LikePlayButton track={track} onClickPlayMusic={onClickPlayMusic} />
           </div>
         </div>
       </div>
     </>
   );
-};
+});

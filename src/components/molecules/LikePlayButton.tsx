@@ -1,7 +1,10 @@
-import { useEffect, useState, VFC } from "react";
+/* eslint-disable react/display-name */
+import { useSession } from "next-auth/react";
+import { memo, useEffect, useState, VFC } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
 import { useRecoilState } from "recoil";
+import SpotifyWebApi from "spotify-web-api-node";
 import {
   collectionState,
   myCollectionTotalState,
@@ -11,21 +14,28 @@ import { playingTrackState, playState } from "../../atoms/playerAtom";
 type Props = {
   track: any;
   onClickPlayMusic: () => void;
-  spotifyApi: any;
-  accessToken: any;
 };
 
-export const LikePlayButton: VFC<Props> = (props: Props) => {
-  const { track, onClickPlayMusic, spotifyApi, accessToken } = props;
+export const LikePlayButton: VFC<Props> = memo((props: Props) => {
+  const { track, onClickPlayMusic } = props;
+  const { data: session } = useSession();
+  const accessToken: any = session?.accessToken;
+  const spotifyApi: any = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+  });
   const [hasLiked, setHasLiked] = useState(false);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
   const [collection, setCollection] = useRecoilState(collectionState);
-  const [myCollectionTotal, setMyCollectionTotal] = useRecoilState(
-    myCollectionTotalState
-  );
+
+  // アクセストークンを設定
+  useEffect(() => {
+    if (!accessToken) return;
+    spotifyApi.setAccessToken(accessToken);
+  }, [accessToken]);
 
   useEffect(() => {
+    spotifyApi.setAccessToken(accessToken);
     /**
      * お気に入りを取得.
      */
@@ -34,38 +44,26 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
         limit: 50,
       })
       .then((res: any) => {
-        setMyCollectionTotal(res.body.total);
-        setCollection(
-          res.body.items.map((track: any) => {
-            return {
-              id: track.track.id,
-              title: track.track.name,
-              artist: track.track.artists.map((artist: any) => {
-                return {
-                  artistName: artist.name,
-                  artistId: artist.id,
-                };
-              }),
-              albumUrl: track.track.album.images[0].url,
-              albumId: track.track.album.id,
-              uri: track.track.uri,
-            };
-          })
-        );
+        res.body.items.find(
+          (collectionTrack: any) => collectionTrack.track.id == track.id
+        )
+          ? setHasLiked(true)
+          : setHasLiked(false);
       });
-  }, [accessToken, setCollection, setMyCollectionTotal, spotifyApi]);
+  }, [accessToken]);
 
-  /**
-   * 登録済みのお気に入りを表示.
-   * @remarks - RecoilのCollectionからお気に入り登録済みのトラックを取得して表示
-   */
-  useEffect(() => {
-    if (!accessToken) return;
-    spotifyApi.setAccessToken(accessToken);
-    collection.find((collectionTrack: any) => collectionTrack.id === track.id)
-      ? setHasLiked(true)
-      : setHasLiked(false);
-  }, [accessToken, collection, spotifyApi, track.id]);
+  // /**
+  //  * 登録済みのお気に入りを表示.
+  //  * @remarks - RecoilのCollectionからお気に入り登録済みのトラックを取得して表示
+  //  */
+  // useEffect(() => {
+  //   if (!accessToken) return;
+
+  //   collection.find((collectionTrack: any) => collectionTrack.id === track.id)
+  //     ? setHasLiked(true)
+  //     : setHasLiked(false);
+  //   console.log("せっとおきに");
+  // }, [accessToken]);
 
   /**
    * お気に入りに追加.
@@ -145,4 +143,4 @@ export const LikePlayButton: VFC<Props> = (props: Props) => {
       )}
     </>
   );
-};
+});

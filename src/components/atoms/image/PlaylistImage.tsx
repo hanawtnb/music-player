@@ -1,5 +1,5 @@
-import { VFC } from "react";
-import { BsFillPauseFill, BsFillPlayFill } from "react-icons/bs";
+/* eslint-disable react/display-name */
+import { VFC, memo } from "react";
 import { HiOutlineMusicNote } from "react-icons/hi";
 import { useRecoilState } from "recoil";
 import { playingTrackState, playState } from "../../../atoms/playerAtom";
@@ -9,7 +9,7 @@ type Props = {
   playlist: any;
 };
 
-export const PlaylistImage: VFC<Props> = (props: Props) => {
+export const PlaylistImage: VFC<Props> = memo((props: Props) => {
   const { playlist } = props;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
@@ -35,4 +35,4 @@ export const PlaylistImage: VFC<Props> = (props: Props) => {
       </div>
     </div>
   );
-};
+});

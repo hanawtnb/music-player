@@ -1,6 +1,7 @@
+import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { IoMdHeart } from "react-icons/io";
 import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
@@ -13,27 +14,33 @@ const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
 });
 
-const Artist = () => {
+const Artist: NextPage = () => {
   const [artistInfo, setArtistInfo] = useState<any>([]);
   const [topTracks, setTopTracks] = useState<any>([]);
   const router = useRouter();
   const { artist_id } = router.query;
-  const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
-
-  //曲を再生
-  const chooseTrack = (track: any): any => {
-    setPlayingTrack(track);
-  };
-
+  const [playlingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const { data: session }: any = useSession();
   //sessionにはアクセストークンやユーザー情報が入っている。
   // const {accessToken} = session!でもOK。
   const accessToken = session?.accessToken;
 
+  // アクセストークンを設定
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
+  }, [accessToken]);
 
+  //曲を再生
+  const chooseTrack = useCallback(
+    (track: any): any => {
+      setPlayingTrack(track);
+    },
+    [setPlayingTrack]
+  );
+
+  useEffect(() => {
+    if (!accessToken) return;
     /**
      * アーティストの情報を取得.
      */
@@ -69,7 +76,7 @@ const Artist = () => {
         })
       );
     });
-  }, [accessToken, spotifyApi]);
+  }, [accessToken]);
 
   return (
     <>

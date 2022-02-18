@@ -1,6 +1,7 @@
+import { NextPage } from "next";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { HiOutlineMusicNote } from "react-icons/hi";
 import { IoMdHeart } from "react-icons/io";
 import { useRecoilState } from "recoil";
@@ -16,7 +17,7 @@ const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
 });
 
-const Album = () => {
+const Album: NextPage = () => {
   const [playlistTracks, setPlaylistTracks] = useState<any>([]);
   const [playlist, setPlaylist] = useState<any>([]);
   const router = useRouter();
@@ -27,35 +28,37 @@ const Album = () => {
   // 検索結果をAPIから取得
   const [searchResults, setSearchResults] = useState([]);
   const [myInfo, setMyInfo] = useState<any>([]);
+  const { data: session }: any = useSession();
+  const accessToken = session?.accessToken;
 
   /**
    * 曲を再生.
    * @param track - 再生する曲
    */
-  const chooseTrack = (track: any): any => {
-    setPlayingTrack(track);
-  };
+  const chooseTrack = useCallback(
+    (track: any): any => {
+      setPlayingTrack(track);
+    },
+    [setPlayingTrack]
+  );
 
-  const { data: session }: any = useSession();
-  //sessionにはアクセストークンやユーザー情報が入っている。
-  // const {accessToken} = session!でもOK。
-  const accessToken = session?.accessToken;
-
+  // アクセストークンを設定
   useEffect(() => {
-    // アクセストークンを設定
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
+  }, [accessToken]);
+
+  useEffect(() => {
+    if (!accessToken) return;
     spotifyApi.getMe().then((res: any) => {
       setMyInfo({
         id: res.body.id,
       });
     });
-  }, [accessToken]);
+  }, [accessToken, myInfo.id]);
 
   useEffect(() => {
-    // アクセストークンを設定
     if (!accessToken) return;
-    spotifyApi.setAccessToken(accessToken);
 
     /**
      *プレイリストを取得.
@@ -76,7 +79,10 @@ const Album = () => {
      * プレイリストの曲を取得.
      */
     spotifyApi
-      .getPlaylistTracks([playlist_id] as any, { limit: 40 })
+      .getPlaylistTracks([playlist_id] as any, {
+        limit: 40,
+        fields: "items",
+      })
       .then((res: any) => {
         setPlaylistTracks(
           res.body.items.map((track: any) => {
@@ -98,7 +104,7 @@ const Album = () => {
           })
         );
       });
-  }, [accessToken, playlist_id]);
+  }, [accessToken]);
 
   /**
    * 曲を検索.
@@ -136,7 +142,7 @@ const Album = () => {
       <section className="my-[20px] bg-black ml-64 space-y-8 md:max-w-6xl flex-grow md:mr-2.5">
         <div className="flex  bg-white/20 h-72 rounded-2xl md:max-w-6xl flex-grow md:mr-2.5">
           <div className="flex bg-[#0D0D0D] relative top-8 left-9  w-[230px] h-[230px] overflow-hidden cursor-pointer ">
-            {playlist.albumUrl === null ? (
+            {playlist.albumUrl === "" ? (
               <div className="bg-white/10 w-[240px] h-[240px]">
                 <HiOutlineMusicNote className=" text-white/80 text-7xl absolute top-20 left-20 items-center justify-center" />
               </div>
@@ -165,15 +171,13 @@ const Album = () => {
           </div>
         </div>
         {playlist.ownerId !== myInfo.id ? (
-          <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
+          <div className="sm:w-[70px] md:w-[800px] xl:w-[1075px] space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
             {playlistTracks.map((track: any, index: number) => (
               <PlaylistTrack
                 key={index}
                 index={index}
                 track={track}
                 chooseTrack={chooseTrack}
-                spotifyApi={spotifyApi}
-                accessToken={accessToken}
                 ownerId={playlist.ownerId}
                 myId={myInfo.id}
               />
@@ -181,15 +185,13 @@ const Album = () => {
           </div>
         ) : (
           <>
-            <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
+            <div className="sm:w-[70px] md:w-[800px] xl:w-[1075px] space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
               {playlistTracks.map((track: any, index: number) => (
                 <MyPlaylistTrack
                   key={index}
                   index={index}
                   track={track}
                   chooseTrack={chooseTrack}
-                  spotifyApi={spotifyApi}
-                  accessToken={accessToken}
                   ownerId={playlist.ownerId}
                   myId={myInfo.id}
                 />
@@ -200,15 +202,13 @@ const Album = () => {
             </p>
             <Search search={search} setSearch={setSearch} />
             {search ? (
-              <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
+              <div className="sm:w-[70px] md:w-[800px] xl:w-[1075px] space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 lg:h-[500px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500">
                 {searchResults.map((track: any, index: number) => (
                   <PlaylistTrack
                     key={index}
                     index={index}
                     track={track}
                     chooseTrack={chooseTrack}
-                    spotifyApi={spotifyApi}
-                    accessToken={accessToken}
                     ownerId={playlist.ownerId}
                     myId={myInfo.id}
                   />

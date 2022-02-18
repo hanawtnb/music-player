@@ -1,7 +1,9 @@
+/* eslint-disable react/display-name */
 import { useSession } from "next-auth/react";
-import { ReactNode, VFC } from "react";
+import { memo, ReactNode, VFC } from "react";
 import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
+
 import { playingTrackState } from "../../atoms/playerAtom";
 import { Player } from "../organisms/layout/Player";
 import { Right } from "../organisms/layout/Right";
@@ -14,7 +16,7 @@ const spotifyApi = new SpotifyWebApi({
 type Props = {
   children: ReactNode;
 };
-export const SidebarLayout: VFC<Props> = (props) => {
+export const SidebarLayout: VFC<Props> = memo((props: Props) => {
   const { children } = props;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const { data: session } = useSession();
@@ -24,6 +26,7 @@ export const SidebarLayout: VFC<Props> = (props) => {
   const chooseTrack = (track: any): any => {
     setPlayingTrack(track);
   };
+
   return (
     <>
       <main className="flex min-h-screen min-w-max bg-black lg:pb-24">
@@ -40,4 +43,4 @@ export const SidebarLayout: VFC<Props> = (props) => {
       </main>
     </>
   );
-};
+});

@@ -1,17 +1,14 @@
-import {
-  ChartBarIcon,
-  ClockIcon,
-  DotsHorizontalIcon,
-  HomeIcon,
-} from "@heroicons/react/solid";
+/* eslint-disable react/display-name */
+/* eslint-disable jsx-a11y/alt-text */
+import { HomeIcon } from "@heroicons/react/solid";
 import { AiFillHeart } from "react-icons/ai";
-import { RiCompassFill, RiPlayListFill } from "react-icons/ri";
-import { FaHistory } from "react-icons/fa";
+import { RiPlayListFill } from "react-icons/ri";
 import Image from "next/image";
 
 import Link from "next/Link";
+import { memo } from "react";
 
-export const Sidebar = () => {
+export const Sidebar = memo(() => {
   return (
     <section className="mt-4 fixed top-0 left-0 z-40 flex flex-col p-4 items-center bg-black w-[200px] h-screen space-y-8">
       <Image src="/logo.png" width={56} height={56} objectFit="contain" />
@@ -37,4 +34,4 @@ export const Sidebar = () => {
       </div>
     </section>
   );
-};
+});

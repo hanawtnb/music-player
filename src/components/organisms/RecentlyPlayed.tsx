@@ -1,6 +1,8 @@
+/* eslint-disable react/display-name */
 import Link from "next/link";
-import { VFC } from "react";
+import { memo, VFC } from "react";
 import { useRecoilState } from "recoil";
+
 import { playingTrackState, playState } from "../../atoms/playerAtom";
 
 type Props = {
@@ -8,7 +10,7 @@ type Props = {
   track: any;
 };
 
-export const RecentlyPlayed: VFC<Props> = (props) => {
+export const RecentlyPlayed: VFC<Props> = memo((props: Props) => {
   const { chooseTrack, track } = props;
 
   const [play, setPlay] = useRecoilState(playState);
@@ -54,6 +56,6 @@ export const RecentlyPlayed: VFC<Props> = (props) => {
       </div>
     </div>
   );
-};
+});
 
 export default RecentlyPlayed;

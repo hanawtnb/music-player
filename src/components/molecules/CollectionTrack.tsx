@@ -1,6 +1,10 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react/display-name */
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { VFC } from "react";
+import { memo, useCallback, VFC } from "react";
 import { useRecoilState } from "recoil";
+import SpotifyWebApi from "spotify-web-api-node";
 
 import { playingTrackState, playState } from "../../atoms/playerAtom";
 import { LikePlayButton } from "./LikePlayButton";
@@ -8,25 +12,28 @@ import { LikePlayButton } from "./LikePlayButton";
 type Props = {
   track: any;
   chooseTrack: (arg1: any) => void;
-  spotifyApi: any;
-  accessToken: any;
   index: number;
 };
 
-export const CollectionTrack: VFC<Props> = (props: Props) => {
-  const { track, chooseTrack, spotifyApi, accessToken, index } = props;
+export const CollectionTrack: VFC<Props> = memo((props: Props) => {
+  const { track, chooseTrack, index } = props;
+  const { data: session } = useSession();
+  const accessToken: any = session?.accessToken;
+  const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+  });
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
 
   /**
    * 曲を再生.
    */
-  const onClickPlayMusic = () => {
+  const onClickPlayMusic = useCallback(() => {
     chooseTrack(track);
     if (track?.uri === playingTrack?.uri) {
       setPlay(!play);
     }
-  };
+  }, [accessToken, setPlay]);
 
   return (
     <>
@@ -64,15 +71,10 @@ export const CollectionTrack: VFC<Props> = (props: Props) => {
 
         <div className="md:ml-auto flex items-center space-x-2.5">
           <div className="flex items-center rounded-full border-2 border-[#262626] w-[85px] h-10 relative cursor-pointer group-hover:border-white/40">
-            <LikePlayButton
-              track={track}
-              onClickPlayMusic={onClickPlayMusic}
-              spotifyApi={spotifyApi}
-              accessToken={accessToken}
-            />
+            <LikePlayButton track={track} onClickPlayMusic={onClickPlayMusic} />
           </div>
         </div>
       </div>
     </>
   );
-};
+});

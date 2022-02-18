@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable react/display-name */
 import Link from "next/link";
-import { VFC } from "react";
+import { memo, VFC } from "react";
 import { useRecoilState } from "recoil";
 
 import { playingTrackState, playState } from "../../atoms/playerAtom";
@@ -15,7 +17,7 @@ type Props = {
   myId: string;
 };
 
-export const ArtistTrack: VFC<Props> = (props: Props) => {
+export const ArtistTrack: VFC<Props> = memo((props: Props) => {
   const { track, chooseTrack, spotifyApi, accessToken, index, ownerId, myId } =
     props;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
@@ -68,15 +70,10 @@ export const ArtistTrack: VFC<Props> = (props: Props) => {
 
         <div className="md:ml-auto flex items-center space-x-2.5">
           <div className="flex items-center rounded-full border-2 border-[#262626] w-[85px] h-10 relative cursor-pointer group-hover:border-white/40">
-            <LikePlayButton
-              track={track}
-              onClickPlayMusic={onClickPlayMusic}
-              spotifyApi={spotifyApi}
-              accessToken={accessToken}
-            />
+            <LikePlayButton track={track} onClickPlayMusic={onClickPlayMusic} />
           </div>
         </div>
       </div>
     </>
   );
-};
+});

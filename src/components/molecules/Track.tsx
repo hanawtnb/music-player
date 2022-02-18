@@ -1,4 +1,5 @@
-import { useEffect, useState, VFC } from "react";
+/* eslint-disable react/display-name */
+import { memo, useCallback, useEffect, VFC } from "react";
 import { useRecoilState } from "recoil";
 import Link from "next/link";
 
@@ -12,20 +13,17 @@ type Props = {
   accessToken: any;
 };
 
-const Track: VFC<Props> = (props: Props) => {
+export const Track: VFC<Props> = memo((props: Props) => {
   const { track, chooseTrack, spotifyApi, accessToken } = props;
-
-  // お気に入り登録
   const [play, setPlay] = useRecoilState(playState);
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
 
-  const onClickPlayMusic = () => {
+  const onClickPlayMusic = useCallback(() => {
     chooseTrack(track);
-
     if (track?.uri === playingTrack?.uri) {
       setPlay(!play);
     }
-  };
+  }, [setPlay]);
 
   // アクセストークンを設定
   useEffect(() => {
@@ -84,16 +82,9 @@ const Track: VFC<Props> = (props: Props) => {
 
       <div className="md:ml-auto flex items-center space-x-2.5">
         <div className="flex items-center rounded-full border-2 border-[#262626] w-[85px] h-10 relative cursor-pointer group-hover:border-white/40">
-          <LikePlayButton
-            track={track}
-            onClickPlayMusic={onClickPlayMusic}
-            spotifyApi={spotifyApi}
-            accessToken={accessToken}
-          />
+          <LikePlayButton track={track} onClickPlayMusic={onClickPlayMusic} />
         </div>
       </div>
     </div>
   );
-};
-
-export default Track;
+});

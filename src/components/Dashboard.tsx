@@ -1,7 +1,8 @@
+/* eslint-disable react/display-name */
 import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 import { playingTrackState } from "../atoms/playerAtom";
 import { Sidebar } from "./organisms/layout/Sidebar";
@@ -13,10 +14,10 @@ const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,
 });
 
-export const Dashboard = () => {
+export const Dashboard = memo(() => {
   //playerを表示させるために必要
   const { data: session } = useSession();
-  const accessToken = session?.accessToken;
+  const accessToken: any = session?.accessToken;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   // プレイヤーバーの表示ステータス
   const [showPlayer, setShowPlayer] = useState(false);
@@ -30,6 +31,11 @@ export const Dashboard = () => {
   const chooseTrack = (track: any): any => {
     setPlayingTrack(track);
   };
+
+  useEffect(() => {
+    if (!accessToken) return;
+    spotifyApi.setAccessToken(accessToken);
+  }, [accessToken]);
 
   return (
     <main className="flex min-h-screen min-w-max bg-black lg:pb-24">
@@ -47,4 +53,4 @@ export const Dashboard = () => {
       </div>
     </main>
   );
-};
+});

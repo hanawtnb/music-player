@@ -1,11 +1,12 @@
+/* eslint-disable react/display-name */
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, memo } from "react";
 import { ChevronDownIcon } from "@heroicons/react/solid";
 import { LogoutIcon } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import { CgProfile } from "react-icons/cg";
 
-export const Dropdown = () => {
+export const Dropdown = memo(() => {
   const { data: session }: any = useSession();
 
   return (
@@ -60,4 +61,4 @@ export const Dropdown = () => {
       </Transition>
     </Menu>
   );
-};
+});

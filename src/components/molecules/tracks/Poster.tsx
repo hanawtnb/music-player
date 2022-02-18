@@ -1,9 +1,9 @@
-/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react/display-name */
 import Link from "next/link";
 import { memo, VFC } from "react";
 import { useRecoilState } from "recoil";
 import { playingTrackState, playState } from "../../../atoms/playerAtom";
-import HeartButton from "../../atoms/button/HeartButton";
+import { HeartButton } from "../../atoms/button/HeartButton";
 import { PlayIcon } from "../../atoms/icon/PlayIcon";
 
 type Props = {
@@ -13,12 +13,10 @@ type Props = {
   accessToken: any;
 };
 
-const Poster: VFC<Props> = (props) => {
+export const Poster: VFC<Props> = memo((props) => {
   const { track, chooseTrack, spotifyApi, accessToken } = props;
   const [play, setPlay] = useRecoilState(playState);
-  const [playingTrack, setPlayingTrack] = useRecoilState(
-    playingTrackState
-  ) as any;
+  const [playingTrack] = useRecoilState(playingTrackState) as any;
 
   /**
    * 音楽を再生.
@@ -80,6 +78,4 @@ const Poster: VFC<Props> = (props) => {
       </div>
     </div>
   );
-};
-
-export default memo(Poster);
+});

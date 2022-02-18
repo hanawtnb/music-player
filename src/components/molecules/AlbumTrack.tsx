@@ -1,10 +1,10 @@
+/* eslint-disable react/display-name */
 import Link from "next/link";
-import { VFC } from "react";
+import { memo, VFC } from "react";
 import { useRecoilState } from "recoil";
 
 import { playingTrackState, playState } from "../../atoms/playerAtom";
 import { LikePlayButton } from "./LikePlayButton";
-import { useRouter } from "next/router";
 
 type Props = {
   track: any;
@@ -15,12 +15,10 @@ type Props = {
   index: number;
 };
 
-export const AlbumTrack: VFC<Props> = (props: Props) => {
-  const { track, chooseTrack, spotifyApi, accessToken, index, album } = props;
-  const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
+export const AlbumTrack: VFC<Props> = memo((props: Props) => {
+  const { track, chooseTrack, spotifyApi, accessToken, index } = props;
+  const [playingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
-  const router = useRouter();
-  const { album_id } = router.query;
 
   /**
    * 曲を再生.
@@ -66,15 +64,10 @@ export const AlbumTrack: VFC<Props> = (props: Props) => {
 
         <div className="md:ml-auto flex items-center space-x-2.5">
           <div className="flex items-center rounded-full border-2 border-[#262626] w-[85px] h-10 relative cursor-pointer group-hover:border-white/40">
-            <LikePlayButton
-              track={track}
-              onClickPlayMusic={onClickPlayMusic}
-              spotifyApi={spotifyApi}
-              accessToken={accessToken}
-            />
+            <LikePlayButton track={track} onClickPlayMusic={onClickPlayMusic} />
           </div>
         </div>
       </div>
     </>
   );
-};
+});

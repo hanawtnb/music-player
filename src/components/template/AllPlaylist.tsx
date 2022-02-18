@@ -1,7 +1,9 @@
+/* eslint-disable react/display-name */
 import { useSession } from "next-auth/react";
-import { useEffect, useState, VFC } from "react";
-import PlaylistPoster from "../molecules/tracks/PlaylistPoster";
+import { memo, useEffect, useState, VFC } from "react";
 import Link from "next/link";
+
+import { PlaylistPoster } from "../molecules/tracks/PlaylistPoster";
 
 type Props = {
   chooseTrack: (arg1: any) => void;
@@ -9,7 +11,7 @@ type Props = {
   accessToken: any;
 };
 
-export const AllPlaylist: VFC<Props> = (props: Props) => {
+export const AllPlaylist: VFC<Props> = memo((props: Props) => {
   const { chooseTrack, spotifyApi, accessToken } = props;
   // プレイリストをAPIから取得
   const [playlists, setPlaylists] = useState([]);
@@ -43,7 +45,7 @@ export const AllPlaylist: VFC<Props> = (props: Props) => {
           })
         );
       });
-  }, [accessToken, session?.user?.id, session?.user?.name, spotifyApi]);
+  }, [accessToken, session]);
 
   return (
     <section className="my-[20px] bg-black ml-52  space-y-7 md:max-w-6xl flex-grow md:mr-2.5">
@@ -70,4 +72,4 @@ export const AllPlaylist: VFC<Props> = (props: Props) => {
       </div>
     </section>
   );
-};
+});

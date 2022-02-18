@@ -1,13 +1,13 @@
 /* eslint-disable react/display-name */
 import { SearchIcon } from "@heroicons/react/solid";
-import { memo, useState, VFC } from "react";
+import { memo, VFC } from "react";
 
 type Props = {
   search: string;
   setSearch: (arg0: string) => void;
 };
 
-export const Search: VFC<Props> = (props) => {
+export const Search: VFC<Props> = memo((props) => {
   const { search, setSearch } = props;
   return (
     <div className="max-w-[1150px] bg-white rounded-full overflow-hidden border-2 border-white p-1.5 px-5 pr-8 flex items-center mt-2">
@@ -23,4 +23,4 @@ export const Search: VFC<Props> = (props) => {
       />
     </div>
   );
-};
+});
