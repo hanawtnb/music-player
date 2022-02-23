@@ -59,9 +59,6 @@ export default NextAuth({
     }),
     // ...add more providers here
   ],
-  pages: {
-    signIn: "/auth/signin",
-  },
   //NextAuth Refresh Token Rotationからコピー。
   callbacks: {
     //JWT(JSON Web Token)の確認。
