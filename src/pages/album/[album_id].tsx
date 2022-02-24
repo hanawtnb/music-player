@@ -6,7 +6,7 @@ import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
 
 import { playingTrackState } from "../../atoms/playerAtom";
-import { AlbumTrack } from "../../components/molecules/AlbumTrack";
+import { AlbumTrack } from "../../components/molecules/tracks/AlbumTrack";
 import { SidebarLayout } from "../../components/template/SidebarLayout";
 
 const spotifyApi = new SpotifyWebApi({

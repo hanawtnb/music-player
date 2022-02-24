@@ -3,7 +3,7 @@ import { useSession } from "next-auth/react";
 import { memo, useEffect, useState, VFC } from "react";
 import Link from "next/link";
 
-import { PlaylistPoster } from "../molecules/tracks/PlaylistPoster";
+import { PlaylistPoster } from "../molecules/posters/PlaylistPoster";
 
 type Props = {
   chooseTrack: (arg1: any) => void;

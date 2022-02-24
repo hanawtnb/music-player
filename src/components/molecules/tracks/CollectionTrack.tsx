@@ -1,35 +1,39 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/display-name */
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { memo, VFC } from "react";
+import { memo, useCallback, VFC } from "react";
 import { useRecoilState } from "recoil";
+import SpotifyWebApi from "spotify-web-api-node";
 
-import { playingTrackState, playState } from "../../atoms/playerAtom";
-import { LikePlayButton } from "./LikePlayButton";
+import { playingTrackState, playState } from "../../../atoms/playerAtom";
+import { LikePlayButton } from "../LikePlayButton";
 
 type Props = {
   track: any;
-  album: any;
   chooseTrack: (arg1: any) => void;
-  spotifyApi: any;
-  accessToken: any;
   index: number;
 };
 
-export const AlbumTrack: VFC<Props> = memo((props: Props) => {
-  const { track, chooseTrack, spotifyApi, accessToken, index } = props;
-  const [playingTrack] = useRecoilState(playingTrackState);
+export const CollectionTrack: VFC<Props> = memo((props: Props) => {
+  const { track, chooseTrack, index } = props;
+  const { data: session } = useSession();
+  const accessToken: any = session?.accessToken;
+  const spotifyApi = new SpotifyWebApi({
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+  });
+  const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
 
   /**
    * 曲を再生.
    */
-  const onClickPlayMusic = () => {
+  const onClickPlayMusic = useCallback(() => {
     chooseTrack(track);
-
     if (track?.uri === playingTrack?.uri) {
       setPlay(!play);
     }
-  };
+  }, [accessToken, setPlay]);
 
   return (
     <>
@@ -39,12 +43,15 @@ export const AlbumTrack: VFC<Props> = memo((props: Props) => {
           className="flex items-center cursor-pointer w-full"
         >
           <h4 className="mr-5 text-white">{index + 1}</h4>
-
+          <img
+            src={track.albumUrl}
+            className="rounded-xl h-12 w-12 object-cover mr-3 float-left"
+          />
           <span>
             <h4 className="text-white text-sm font-semibold truncate w-[450px]">
               {track.title}
             </h4>
-            {track.artist?.map((artist: any) => (
+            {track.artist.map((artist: any) => (
               <Link
                 key={artist.artistId}
                 href="/artist/[artist.artistId]"

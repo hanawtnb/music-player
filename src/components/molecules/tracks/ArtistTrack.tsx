@@ -1,39 +1,38 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/display-name */
-import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { memo, useCallback, VFC } from "react";
+import { memo, VFC } from "react";
 import { useRecoilState } from "recoil";
-import SpotifyWebApi from "spotify-web-api-node";
 
-import { playingTrackState, playState } from "../../atoms/playerAtom";
-import { LikePlayButton } from "./LikePlayButton";
+import { playingTrackState, playState } from "../../../atoms/playerAtom";
+import { LikePlayButton } from "../LikePlayButton";
 
 type Props = {
   track: any;
   chooseTrack: (arg1: any) => void;
+  spotifyApi: any;
+  accessToken: any;
   index: number;
+  ownerId: string;
+  myId: string;
 };
 
-export const CollectionTrack: VFC<Props> = memo((props: Props) => {
-  const { track, chooseTrack, index } = props;
-  const { data: session } = useSession();
-  const accessToken: any = session?.accessToken;
-  const spotifyApi = new SpotifyWebApi({
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-  });
+export const ArtistTrack: VFC<Props> = memo((props: Props) => {
+  const { track, chooseTrack, spotifyApi, accessToken, index, ownerId, myId } =
+    props;
   const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
 
   /**
    * 曲を再生.
    */
-  const onClickPlayMusic = useCallback(() => {
+  const onClickPlayMusic = () => {
     chooseTrack(track);
+
     if (track?.uri === playingTrack?.uri) {
       setPlay(!play);
     }
-  }, [accessToken, setPlay]);
+  };
 
   return (
     <>

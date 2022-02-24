@@ -49,24 +49,26 @@ export const Poster: VFC<Props> = memo((props) => {
             {track.title}
           </h4>
 
-          {track.artist.map((artist: any) => (
-            <Link
-              key={artist.artistId}
-              href="/artist/[artist.artistId]"
-              as={`/artist/${artist.artistId}`}
-              passHref
-            >
-              <a>
-                <span className="hover:underline underline-offset-1 text-white/70 text-[11px] font-semibold group-hover:text-white">
-                  {artist.artistName}
-                  &nbsp;
-                </span>
-              </a>
-            </Link>
-          ))}
-          {/* <h6 className="line-clamp-1">
+          <div className=" line-clamp-1">
+            {track.artist.map((artist: any) => (
+              <Link
+                key={artist.artistId}
+                href="/artist/[artist.artistId]"
+                as={`/artist/${artist.artistId}`}
+                passHref
+              >
+                <a>
+                  <span className="hover:underline underline-offset-1 text-white/70 text-[11px] font-semibold group-hover:text-white">
+                    {artist.artistName}
+                    &nbsp;
+                  </span>
+                </a>
+              </Link>
+            ))}
+            {/* <h6 className="line-clamp-1">
             {track?.artist.map((artist: any) => artist.artistName).join(", ")}
           </h6> */}
+          </div>
         </div>
       </div>
       <div className="relative left-48">

@@ -7,8 +7,8 @@ import { memo, useCallback, useEffect, useState, VFC } from "react";
 import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
 
-import { playingTrackState, playState } from "../../atoms/playerAtom";
-import { LikePlayButton } from "./LikePlayButton";
+import { playingTrackState, playState } from "../../../atoms/playerAtom";
+import { LikePlayButton } from "../LikePlayButton";
 
 type Props = {
   track: any;
@@ -18,7 +18,7 @@ type Props = {
   myId: string;
 };
 
-export const PlaylistTrack: VFC<Props> = memo((props: Props) => {
+export const MyPlaylistTrack: VFC<Props> = memo((props: Props) => {
   const { track, chooseTrack, index, ownerId, myId } = props;
   const { data: session } = useSession();
   const accessToken: any = session?.accessToken;
@@ -29,13 +29,14 @@ export const PlaylistTrack: VFC<Props> = memo((props: Props) => {
   const [play, setPlay] = useRecoilState(playState);
   const router = useRouter();
   const { playlist_id }: any = router.query;
-  const [playlistTrack, setPlaylistTrack] = useState<any>([]);
-  // const [snapshot_id, setSnapshot_id] = useState() as any;
+  const [playlistTracks, setPlaylistTrack] = useState<any>([]);
+  const [snapshot_id, setSnapshot_id] = useState() as any;
 
   // アクセストークンを設定
   useEffect(() => {
     if (!accessToken) return;
     spotifyApi.setAccessToken(accessToken);
+    console.log("アクセストークン");
   }, [accessToken]);
 
   /**
@@ -50,53 +51,56 @@ export const PlaylistTrack: VFC<Props> = memo((props: Props) => {
   }, [accessToken, setPlay]);
 
   /**
-   * 曲をプレイリストに追加.
+   * 曲をプレイリストから削除
    */
-  const onClickAddtoPlaylist = (track: any) => {
+  const onClickRemoveFromPlaylist = (track: any) => {
     spotifyApi.setAccessToken(accessToken);
-    spotifyApi.addTracksToPlaylist(playlist_id, [track.uri]);
+    spotifyApi.removeTracksFromPlaylist(playlist_id, [{ uri: track.uri }], {
+      snapshot_id: snapshot_id,
+    });
+    console.log("さくじょ");
   };
 
-  // useEffect(() => {
-  //   spotifyApi.setAccessToken(accessToken);
-  //   // /**
-  //   //  *プレイリストを取得.
-  //   //  */
-  //   // spotifyApi.getPlaylist([playlist_id] as any).then((res: any) => {
-  //   //   setSnapshot_id(res.body.snapshot_id);
-  //   // });
-  //   /**
-  //    * プレイリストの曲を取得.
-  //    */
-  //   spotifyApi
-  //     .getPlaylistTracks([playlist_id] as any, {
-  //       limit: 50,
-  //       fields: "items",
-  //     })
-  //     .then((res: any) => {
-  //       setPlaylistTrack(
-  //         res.body.items.map((track: any) => {
-  //           return {
-  //             id: track.track.id,
-  //             title: track.track.name,
-  //             albumName: track.track.album.name,
-  //             albumId: track.track.album.id,
-  //             releaseDate: track.track.album.release_date,
-  //             // description: track.track.description,
-  //             uri: track.track.uri,
-  //             albumUrl: track.track.album.images[0].url,
-  //             artist: track.track.artists?.map((artist: any) => {
-  //               return {
-  //                 artistName: artist.name,
-  //                 artistId: artist.id,
-  //               };
-  //             }),
-  //           };
-  //         })
-  //       );
-  //     });
-  //   console.log("プレイリストを取得１１１");
-  // }, [onClickAddtoPlaylist]);
+  useEffect(() => {
+    spotifyApi.setAccessToken(accessToken);
+    /**
+     *プレイリストを取得.
+     */
+    spotifyApi.getPlaylist([playlist_id] as any).then((res: any) => {
+      setSnapshot_id(res.body.snapshot_id);
+    });
+    /**
+     * プレイリストの曲を取得.
+     */
+    spotifyApi
+      .getPlaylistTracks([playlist_id] as any, {
+        limit: 40,
+        fields: "items",
+      })
+      .then((res: any) => {
+        setPlaylistTrack(
+          res.body.items.map((track: any) => {
+            return {
+              id: track.track.id,
+              title: track.track.name,
+              albumName: track.track.album.name,
+              albumId: track.track.album.id,
+              releaseDate: track.track.album.release_date,
+              // description: track.track.description,
+              uri: track.track.uri,
+              albumUrl: track.track.album.images[0].url,
+              artist: track.track.artists?.map((artist: any) => {
+                return {
+                  artistName: artist.name,
+                  artistId: artist.id,
+                };
+              }),
+            };
+          })
+        );
+      });
+    console.log("よばれる");
+  }, []);
 
   return (
     <>
@@ -136,10 +140,10 @@ export const PlaylistTrack: VFC<Props> = memo((props: Props) => {
           {ownerId === myId ? (
             <span className="text-white related left-100">
               <button
-                className="border rounded-full w-20 h-10 hover:cursor-pointer hover:bg-[#15883e]"
-                onClick={() => onClickAddtoPlaylist(track) as any}
+                className="border rounded-full w-24 h-10 hover:cursor-pointer hover:bg-[#15883e]"
+                onClick={() => onClickRemoveFromPlaylist(track) as any}
               >
-                Add
+                Remove
               </button>
             </span>
           ) : (

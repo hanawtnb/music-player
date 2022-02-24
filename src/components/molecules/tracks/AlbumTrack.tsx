@@ -1,26 +1,23 @@
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/display-name */
 import Link from "next/link";
 import { memo, VFC } from "react";
 import { useRecoilState } from "recoil";
 
-import { playingTrackState, playState } from "../../atoms/playerAtom";
-import { LikePlayButton } from "./LikePlayButton";
+import { playingTrackState, playState } from "../../../atoms/playerAtom";
+import { LikePlayButton } from "../LikePlayButton";
 
 type Props = {
   track: any;
+  album: any;
   chooseTrack: (arg1: any) => void;
   spotifyApi: any;
   accessToken: any;
   index: number;
-  ownerId: string;
-  myId: string;
 };
 
-export const ArtistTrack: VFC<Props> = memo((props: Props) => {
-  const { track, chooseTrack, spotifyApi, accessToken, index, ownerId, myId } =
-    props;
-  const [playingTrack, setPlayingTrack] = useRecoilState(playingTrackState);
+export const AlbumTrack: VFC<Props> = memo((props: Props) => {
+  const { track, chooseTrack, spotifyApi, accessToken, index } = props;
+  const [playingTrack] = useRecoilState(playingTrackState);
   const [play, setPlay] = useRecoilState(playState);
 
   /**
@@ -42,15 +39,12 @@ export const ArtistTrack: VFC<Props> = memo((props: Props) => {
           className="flex items-center cursor-pointer w-full"
         >
           <h4 className="mr-5 text-white">{index + 1}</h4>
-          <img
-            src={track.albumUrl}
-            className="rounded-xl h-12 w-12 object-cover mr-3 float-left"
-          />
+
           <span>
             <h4 className="text-white text-sm font-semibold truncate w-[450px]">
               {track.title}
             </h4>
-            {track.artist.map((artist: any) => (
+            {track.artist?.map((artist: any) => (
               <Link
                 key={artist.artistId}
                 href="/artist/[artist.artistId]"

@@ -2,9 +2,9 @@
 import { useSession } from "next-auth/react";
 import { memo, useEffect, useState, VFC } from "react";
 
-import { Poster } from "../molecules/tracks/Poster";
-import { Search } from "../molecules/Search";
-import { Track } from "../molecules/Track";
+import { Poster } from "../../molecules/posters/Poster";
+import { Search } from "../../molecules/Search";
+import { Track } from "../../molecules/tracks/Track";
 
 type Props = {
   spotifyApi: any;
@@ -95,7 +95,7 @@ export const Body: VFC<Props> = memo((props: Props) => {
   return (
     <section className="my-[20px] bg-black ml-52 space-y-7 md:max-w-6xl flex-grow md:mr-2.5">
       <Search search={search} setSearch={setSearch} />
-      <div className="grid overflow-y-scroll scrollbar-hide grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
+      <div className="grid overflow-hidden scrollbar-hide grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-8">
         {searchResults.length === 0
           ? newReleases
               .slice(0, 4)
@@ -126,7 +126,7 @@ export const Body: VFC<Props> = memo((props: Props) => {
           <h2 className="text-white font-bold mb-3 mt-0">
             {searchResults.length === 0 ? "New Releases" : "Tracks"}
           </h2>
-          <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 xl:h-[355px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500 w-[1090px] sm:w-[70px] md:w-[800px] xl:w-[1090px]">
+          <div className="space-y-3 border-2 border-[#262626] rounded-2xl p-3 bg-[#0D0D0D] overflow-y-scroll md:h-96 xl:h-[355px] scrollbar-thin scrollbar-thumb-gray-600 scrollbar-thumb-rounded hover:scrollbar-thumb-gray-500 w-[500px] sm:w-[500px] md:w-[780px] xl:w-[1090px]">
             {searchResults.length === 0
               ? newReleases
                   .slice(4, newReleases.length)

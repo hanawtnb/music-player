@@ -1,7 +1,7 @@
 /* eslint-disable react/display-name */
 import { memo, useEffect, useState, VFC } from "react";
 import { Dropdown } from "../../molecules/Dropdown";
-import { RecentlyPlayed } from "../RecentlyPlayed";
+import RecentlyPlayed from "../../molecules/RecentlyPlayed";
 
 type Props = {
   spotifyApi: any;
@@ -62,13 +62,13 @@ export const Right: VFC<Props> = memo((props: Props) => {
           <Dropdown />
         </div>
         {/* 最近再生された曲 */}
-        <div className="bg-[#0d0d0d] border-2 border-[#262626] p-4 rounded-xl space-y-4 h-[735px]">
-          <div className="flex items-center justify-between ">
+        <div className="bg-[#0d0d0d] border-2 border-[#262626] p-4 rounded-xl space-y-4 h-[1660px]  md:h-[1125px] sm:w-[300px] md:w-[300px] lg:w-[300px] xl:h-[735px] ml-3">
+          <div className="flex items-center justify-between">
             <h4 className="text-white font-semibold text-sm ">
               Recently Played
             </h4>
           </div>
-          <div className="space-y-4 overflow-y-scroll overflow-x-hidden h-[250px] md:h-[680px] scrollbar-hide">
+          <div className="space-y-4 overflow-y-scroll overflow-x-hidden h-[1590px]  md:h-[1050px] xl:h-[670px] scrollbar-hide">
             {result.map((track: any, index: number) => (
               <RecentlyPlayed
                 key={index}

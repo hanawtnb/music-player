@@ -3,8 +3,8 @@ import { memo, useCallback, useEffect, VFC } from "react";
 import { useRecoilState } from "recoil";
 import Link from "next/link";
 
-import { playingTrackState, playState } from "../../atoms/playerAtom";
-import { LikePlayButton } from "./LikePlayButton";
+import { playingTrackState, playState } from "../../../atoms/playerAtom";
+import { LikePlayButton } from "../LikePlayButton";
 
 type Props = {
   track: any;

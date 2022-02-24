@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-import { Dashboard } from "../components/Dashboard";
+import { Dashboard } from "../components/template/Dashboard";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -9,7 +9,7 @@ import SpotifyWebApi from "spotify-web-api-node";
 import { useCallback, useEffect, useState } from "react";
 
 import { playingTrackState } from "../atoms/playerAtom";
-import { Body } from "../components/template/Body";
+import { Body } from "../components/organisms/layout/Body";
 import { SidebarLayout } from "../components/template/SidebarLayout";
 import { Loader } from "../components/atoms/Loader";
 import { NextPage } from "next";

@@ -27,7 +27,7 @@ export const Sidebar = memo(() => {
         </Link>
         <Link href="/collection">
           <a className="flex justify-center space-x-5">
-            <AiFillHeart className="sidebarIcon text-2xl ml-10" />
+            <AiFillHeart className="sidebarIcon text-2xl ml-8" />
             <span className="text-white">Collection</span>
           </a>
         </Link>

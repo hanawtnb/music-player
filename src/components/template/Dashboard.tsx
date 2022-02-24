@@ -4,11 +4,11 @@ import SpotifyWebApi from "spotify-web-api-node";
 import { useSession } from "next-auth/react";
 import { memo, useEffect, useState } from "react";
 
-import { playingTrackState } from "../atoms/playerAtom";
-import { Sidebar } from "./organisms/layout/Sidebar";
-import { Right } from "./organisms/layout/Right";
-import { Player } from "./organisms/layout/Player";
-import { Body } from "./template/Body";
+import { playingTrackState } from "../../atoms/playerAtom";
+import { Sidebar } from "../organisms/layout/Sidebar";
+import { Right } from "../organisms/layout/Right";
+import { Player } from "../organisms/layout/Player";
+import { Body } from "../organisms/layout/Body";
 
 const spotifyApi = new SpotifyWebApi({
   clientId: process.env.SPOTIFY_CLIENT_ID,

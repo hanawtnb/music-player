@@ -8,9 +8,9 @@ import { useRecoilState } from "recoil";
 import SpotifyWebApi from "spotify-web-api-node";
 
 import { playingTrackState } from "../../atoms/playerAtom";
-import { MyPlaylistTrack } from "../../components/molecules/MyPlaylistTrack";
-import { PlaylistTrack } from "../../components/molecules/PlaylistTrack";
-import { Search } from "../../components/Searchbar";
+import { MyPlaylistTrack } from "../../components/molecules/tracks/MyPlaylistTrack";
+import { PlaylistTrack } from "../../components/molecules/tracks/PlaylistTrack";
+import { Search } from "../../components/molecules/Searchbar";
 import { SidebarLayout } from "../../components/template/SidebarLayout";
 
 const spotifyApi = new SpotifyWebApi({

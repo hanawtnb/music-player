@@ -7,7 +7,7 @@ import { NextPage } from "next";
 import { SidebarLayout } from "../components/template/SidebarLayout";
 import { useRecoilState } from "recoil";
 import { playingTrackState } from "../atoms/playerAtom";
-import { CollectionTrack } from "../components/molecules/CollectionTrack";
+import { CollectionTrack } from "../components/molecules/tracks/CollectionTrack";
 import {
   collectionState,
   myCollectionTotalState,
