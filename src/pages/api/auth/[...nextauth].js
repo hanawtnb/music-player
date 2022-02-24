@@ -59,6 +59,7 @@ export default NextAuth({
     }),
     // ...add more providers here
   ],
+  secret: process.env.SPOTIFY_CLIENT_SECRET,
   //NextAuth Refresh Token Rotationからコピー。
   callbacks: {
     //JWT(JSON Web Token)の確認。
