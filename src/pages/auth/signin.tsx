@@ -5,10 +5,11 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Loader } from "../../components/atoms/Loader";
 
-function Signin({ providers }: any) {
+function Signin() {
   // useSessionで session 情報を保持する変数を作成
   const { data: session } = useSession();
   const router = useRouter();
+  const [providers, setProviders] = useState<any>([]);
 
   useEffect(() => {
     if (session) {
@@ -19,6 +20,22 @@ function Signin({ providers }: any) {
   if (session) {
     <Loader />;
   }
+
+  // // サーバサイドでsession情報を取得したい場合はuseSession Hookは利用できないのでgetSessionを利用します。
+  // // getServerSidePropsはクライアントからのアクセス時にサーバ側でデータを取得しpre-Renderingする。
+  // export async function getServerSideProps() {
+  //   const providers = await getProviders();
+  //   return {
+  //     props: { providers },
+  //   };
+  // }
+
+  useEffect(() => {
+    (async () => {
+      const res: any = await getProviders();
+      setProviders(res);
+    })();
+  }, []);
 
   return (
     <div className="bg-black h-screen flex flex-col items-center pt-40 space-y-8">
@@ -50,12 +67,3 @@ function Signin({ providers }: any) {
 }
 
 export default Signin;
-
-// サーバサイドでsession情報を取得したい場合はuseSession Hookは利用できないのでgetSessionを利用します。
-// getServerSidePropsはクライアントからのアクセス時にサーバ側でデータを取得しpre-Renderingする。
-export async function getServerSideProps() {
-  const providers = await getProviders();
-  return {
-    props: { providers },
-  };
-}
